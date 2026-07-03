@@ -1,0 +1,16 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "claude-plugins",
+  "owner": {
+    "name": "rob",
+    "email": "esgames@gmail.com"
+  },
+  "description": "A curated collection of Claude Code plugins",
+  "plugins": [
+    {
+      "name": "journal",
+      "source": "./plugins/journal",
+      "description": "Conversational journaling assistant that interviews you about your day and saves a Markdown entry to documents/journal/"
+    }
+  ]
+}

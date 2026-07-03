@@ -4,15 +4,18 @@ A conversational journaling assistant for Claude Code. It interviews you about y
 
 ## Install
 
-Copy [command.md](command.md) to `.claude/commands/journal.md` in any project (or `~/.claude/commands/journal.md` for global access).
+```
+/plugin marketplace add <marketplace-url>
+/plugin install journal@claude-plugins
+```
 
 ## Usage
 
 ```
-/journal
+/journal:journal
 ```
 
-Claude will ask you a series of open-ended questions about your day, follow up on interesting threads, and then write the entry when the conversation feels complete.
+Claude will ask you one open-ended question about your day, follow up on what's most interesting or emotionally resonant, and write the entry when the conversation feels complete (usually 4–8 exchanges).
 
 ## Output
 
@@ -22,4 +25,4 @@ Entries are saved to:
 documents/journal/YYYY-MM-DD.md
 ```
 
-Each entry includes a title, date, narrative prose, and a brief reflection section.
+Each entry includes a title, date, narrative prose written in first person, and a brief reflection section.

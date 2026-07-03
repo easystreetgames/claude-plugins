@@ -4,15 +4,16 @@ A collection of Claude Code plugins — custom slash commands you can drop into 
 
 ## Installing a Plugin
 
-Copy the desired plugin's command file into your project's `.claude/commands/` directory:
-
 ```
-.claude/
-  commands/
-    journal.md   ← paste here
+/plugin marketplace add https://github.com/<your-username>/claude-plugins
+/plugin install journal@claude-plugins
 ```
 
-Then use it in Claude Code with `/<plugin-name>`.
+Then invoke the skill:
+
+```
+/journal:journal
+```
 
 ## Plugins
 
@@ -24,5 +25,5 @@ Then use it in Claude Code with `/<plugin-name>`.
 
 Each plugin lives in `plugins/<name>/` with:
 - `README.md` — what it does and how to use it
-- `command.md` — the file to copy into `.claude/commands/`
-- `plugin.json` — metadata (name, version, author, description)
+- `.claude-plugin/plugin.json` — plugin manifest (name, version, skills paths)
+- `skills/<skill-name>/SKILL.md` — the skill prompt with frontmatter description
