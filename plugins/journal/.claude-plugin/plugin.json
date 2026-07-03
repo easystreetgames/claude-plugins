@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
   "name": "journal",
-  "description": "Conversational journaling assistant that interviews you about your day and saves a Markdown entry to documents/journal/",
-  "version": "1.0.0",
+  "description": "Conversational journaling assistant that interviews you about your day, searches for relevant tech news, and saves a structured entry with todo list to C:\\Users\\Rob\\Downloads\\Journal",
+  "version": "1.1.0",
   "skills": "./skills"
 }
