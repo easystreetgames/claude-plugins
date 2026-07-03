@@ -6,7 +6,7 @@ A collection of Claude Code plugins — custom slash commands you can drop into 
 
 ```
 /plugin marketplace add https://github.com/<your-username>/claude-plugins
-/plugin install journal@claude-plugins
+/plugin install journal@esgames-plugins
 ```
 
 Then invoke the skill:

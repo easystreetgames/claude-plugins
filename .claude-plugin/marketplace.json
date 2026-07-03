@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
-  "name": "claude-plugins",
+  "name": "esgames-plugins",
   "owner": {
     "name": "rob",
     "email": "esgames@gmail.com"

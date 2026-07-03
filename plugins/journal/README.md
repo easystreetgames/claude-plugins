@@ -6,7 +6,7 @@ A conversational journaling assistant for Claude Code. It interviews you about y
 
 ```
 /plugin marketplace add <marketplace-url>
-/plugin install journal@claude-plugins
+/plugin install journal@esgames-plugins
 ```
 
 ## Usage
