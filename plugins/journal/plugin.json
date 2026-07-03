@@ -1,0 +1,8 @@
+{
+  "name": "journal",
+  "version": "1.0.0",
+  "description": "Conversational journaling assistant that interviews you about your day and saves a Markdown entry to documents/journal/",
+  "author": "claude-plugins",
+  "command": "journal",
+  "outputPath": "documents/journal/"
+}
