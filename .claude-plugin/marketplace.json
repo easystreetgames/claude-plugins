@@ -11,6 +11,11 @@
       "name": "journal",
       "source": "./plugins/journal",
       "description": "Conversational journaling assistant that interviews you about your day and saves a Markdown entry to documents/journal/"
+    },
+    {
+      "name": "usability-report",
+      "source": "./plugins/usability-report",
+      "description": "Evaluates a target (URL, app, UI, or codebase) against Nielsen's 10 usability heuristics and generates a structured Markdown report with severity ratings and recommendations."
     }
   ]
 }
