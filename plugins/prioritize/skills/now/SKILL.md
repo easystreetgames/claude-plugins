@@ -53,7 +53,7 @@ You are helping the user start their workday with clarity and a concrete priorit
 
 ### 1. Load context
 
-- Attempt to read `~/Downloads/Journal/{today}.txt`. If it exists, extract every unchecked item (`- [ ]`) from the `## Todo` section.
+- Attempt to read `~/Downloads/Journal/{today}.txt`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
 - Attempt to read `~/Downloads/Journal/current_context.txt` for standing project and people context.
 - If neither file exists, proceed with an empty task list and rely entirely on conversation.
 
@@ -131,11 +131,17 @@ Based on what the user tells you:
 
 - **Task finished:** call `add_observations`:
   ```json
-  { "entityName": "task:{slug}", "observations": ["status: done"] }
+  [{ "entityName": "task:{slug}", "contents": ["status: done"] }]
   ```
 - **New task:** call `create_entities` with `status: pending` observation, then `create_relations` for project link (same pattern as Morning Kickoff step 3)
-- **Blocker:** call `add_observations` with `note: {blocker description}`, and `create_relations` with `relationType: blocks` if one task is holding up another
-- **Reprioritize:** call `add_observations` to update `priority` values on affected tasks
+- **Blocker:** call `add_observations` with `note: {blocker description}` in `contents`, and `create_relations` with `relationType: blocks` if one task is holding up another:
+  ```json
+  [{ "entityName": "task:{slug}", "contents": ["note: {blocker description}"] }]
+  ```
+- **Reprioritize:** call `add_observations` to update `priority` values on affected tasks:
+  ```json
+  [{ "entityName": "task:{slug}", "contents": ["priority: 1"] }]
+  ```
 
 ### 4. Output: What to focus on next
 
