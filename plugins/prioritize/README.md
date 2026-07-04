@@ -6,14 +6,18 @@ Work prioritizer for Claude Code. Uses a local knowledge graph (via MCP) to run 
 
 **1. Configure the MCP server**
 
-Add the following to `~/.claude/settings.json` under the `mcpServers` key:
+Create or edit `~/.claude/.mcp.json` (your global MCP config) and add the `memory` entry:
 
 ```json
-"memory": {
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-memory"],
-  "env": {
-    "MEMORY_FILE_PATH": "C:/Users/Rob/Downloads/Journal/memory/priority_graph.json"
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "C:/Users/Rob/Downloads/Journal/memory/priority_graph.json"
+      }
+    }
   }
 }
 ```
@@ -22,7 +26,7 @@ Add the following to `~/.claude/settings.json` under the `mcpServers` key:
 
 **2. Restart Claude Code**
 
-The MCP server is started by Claude Code on launch — a restart is required after changing `settings.json`.
+The MCP server is started by Claude Code on launch — a restart is required after adding the `.mcp.json` entry.
 
 **3. Install the plugin**
 

@@ -6,14 +6,18 @@ description: Prioritize your work at any point in the day. Runs morning kickoff 
 
 ## Setup (required before first use)
 
-This skill requires the `@modelcontextprotocol/server-memory` MCP server. Add the following to `~/.claude/settings.json` under the `mcpServers` key, then restart Claude Code:
+This skill requires the `@modelcontextprotocol/server-memory` MCP server. Create or edit `~/.claude/.mcp.json` (your global MCP config) and add the `memory` entry, then restart Claude Code:
 
 ```json
-"memory": {
-  "command": "npx",
-  "args": ["-y", "@modelcontextprotocol/server-memory"],
-  "env": {
-    "MEMORY_FILE_PATH": "C:/Users/Rob/Downloads/Journal/memory/priority_graph.json"
+{
+  "mcpServers": {
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "env": {
+        "MEMORY_FILE_PATH": "C:/Users/Rob/Downloads/Journal/memory/priority_graph.json"
+      }
+    }
   }
 }
 ```
