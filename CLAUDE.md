@@ -6,14 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A Claude Code plugin marketplace. The marketplace is registered as `esgames-plugins`. Users add it with:
 
-```
+```text
 /plugin marketplace add <repo-url>
 /plugin install <plugin-name>@esgames-plugins
 ```
 
 ## Repository structure
 
-```
+```text
 .claude-plugin/marketplace.json        ← marketplace catalog (registry of all plugins)
 plugins/<name>/
   .claude-plugin/plugin.json           ← plugin manifest (name, version, skills path)
@@ -26,9 +26,25 @@ README.md                              ← marketplace overview
 
 1. Create `plugins/<name>/` with the structure above.
 2. `plugin.json` minimum fields: `name`, `description`, `version`, `skills` (path to skills dir).
-3. `SKILL.md` requires YAML frontmatter with a `description` field; the body is the prompt.
+3. `SKILL.md` requires YAML frontmatter with a `description` field; the body is the prompt:
+
+   ```yaml
+   ---
+   description: One-line description shown in skill picker
+   ---
+   ```
+
 4. Register the plugin in `.claude-plugin/marketplace.json` under `plugins[]` with a `name` and `"source": "./plugins/<name>"`.
 5. Bump `version` in `plugin.json` on every release — Claude Code uses this to detect updates.
+
+## Testing locally
+
+Install a plugin from a local path and invoke its skill to verify:
+
+```text
+/plugin install <name> --local ./plugins/<name>
+/<plugin-name>:<skill-name>
+```
 
 ## Naming rules
 
