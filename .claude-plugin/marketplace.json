@@ -16,6 +16,11 @@
       "name": "usability-report",
       "source": "./plugins/usability-report",
       "description": "Evaluates a target (URL, app, UI, or codebase) against Nielsen's 10 usability heuristics and generates a structured Markdown report with severity ratings and recommendations."
+    },
+    {
+      "name": "prioritize",
+      "source": "./plugins/prioritize",
+      "description": "Work prioritizer using a local MCP memory graph. Runs morning kickoff or mid-day triage based on today's graph state."
     }
   ]
 }

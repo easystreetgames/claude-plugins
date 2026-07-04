@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "prioritize",
+  "description": "Work prioritizer using a local MCP memory graph. Runs morning kickoff or mid-day triage based on today's graph state.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
