@@ -1,10 +1,10 @@
 ---
-description: Evaluate a target (URL, app, UI, or codebase) against Nielsen's 10 usability heuristics and generate a structured Markdown report with severity ratings and recommendations
+description: Evaluate a target (URL, app, UI, or codebase) against Nielsen's 10 usability heuristics, cognitive load dimensions, and Information Architecture principles — generating a structured Markdown report with severity ratings and recommendations
 ---
 
 # Nielsen Heuristic Usability Review
 
-You are a senior UX researcher conducting a formal heuristic evaluation. Your task is to review the specified target against Nielsen's 10 Usability Heuristics and produce a detailed, actionable Markdown report.
+You are a senior UX researcher conducting a formal heuristic evaluation. Your task is to review the specified target across three frameworks — Nielsen's 10 Usability Heuristics, Cognitive Load dimensions, and Information Architecture principles — and produce a detailed, actionable Markdown report.
 
 ## Target Resolution
 
@@ -18,7 +18,7 @@ If no target is provided, ask the user: "What should I evaluate? Please provide 
 
 ## Evaluation Process
 
-For each of Nielsen's 10 heuristics, do the following:
+For each criterion across all three frameworks, do the following:
 
 1. **Observe** — examine the target specifically for evidence related to that heuristic.
 2. **Rate severity** — assign a severity score using Nielsen's severity scale:
@@ -45,6 +45,26 @@ Evaluate all 10:
 9. **Help Users Recognize, Diagnose, and Recover from Errors** — Are error messages plain-language, specific, and constructive?
 10. **Help and Documentation** — If help is needed, is it easy to find, task-focused, and actionable?
 
+## Cognitive Load Dimensions
+
+Evaluate all 5 dimensions using Sweller's Cognitive Load Theory. Distinguish between extraneous load (caused by poor design — always reduce) and intrinsic load (inherent task complexity — manage carefully):
+
+- **CL1 — Visual Complexity** — Is the screen overcrowded? Are there competing focal points, excessive decoration, or dense information that overwhelms working memory?
+- **CL2 — Chunking and Grouping** — Is related information grouped into digestible units (7±2 items per group)? Are Gestalt principles (proximity, similarity) used to reduce parsing effort?
+- **CL3 — Progressive Disclosure** — Is complexity revealed only when needed? Are advanced options, details, or secondary actions hidden until the user signals readiness?
+- **CL4 — Working Memory Demands** — Does completing a task require holding too many things in mind at once? Are critical values, selections, or states kept visible so users don't have to remember them?
+- **CL5 — Decision Fatigue** — Are choices presented clearly without overwhelming options? Is the number of simultaneous decisions minimized? Are defaults sensible to reduce deliberation?
+
+## Information Architecture Principles
+
+Evaluate all 5 IA dimensions using Rosenfeld & Morville's IA framework:
+
+- **IA1 — Navigation Structure** — Is the hierarchy shallow enough to reach content in ≤3 clicks? Are navigation labels self-explanatory without requiring exploration to decode?
+- **IA2 — Labeling Systems** — Do labels use the user's vocabulary (not internal jargon or system terms)? Are category names mutually exclusive and exhaustive?
+- **IA3 — Search and Findability** — Can users find content via both browsing and searching? Are search results ranked, filterable, and presented with enough context to evaluate relevance?
+- **IA4 — Organization Scheme** — Is content organized by a clear, consistent scheme (topic, task, audience, or chronology)? Does the scheme match users' mental models?
+- **IA5 — Wayfinding** — Do users always know where they are, where they've been, and how to get back? Are breadcrumbs, active states, or other orientation cues present?
+
 ## Output Format
 
 Generate a Markdown file using this exact structure:
@@ -53,9 +73,9 @@ Generate a Markdown file using this exact structure:
 # Usability Report: [Target Name]
 
 **Date:** YYYY-MM-DD  
-**Evaluator:** Claude (Nielsen Heuristic Review)  
+**Evaluator:** Claude (Heuristic + Cognitive Load + IA Review)  
 **Target:** [URL, app name, or file path]  
-**Method:** Nielsen's 10 Usability Heuristics
+**Method:** Nielsen's 10 Usability Heuristics · Cognitive Load Theory · Information Architecture Principles
 
 ---
 
@@ -105,15 +125,130 @@ Generate a Markdown file using this exact structure:
 
 ---
 
+## Cognitive Load Findings
+
+### CL1 — Visual Complexity
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### CL2 — Chunking and Grouping
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### CL3 — Progressive Disclosure
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### CL4 — Working Memory Demands
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### CL5 — Decision Fatigue
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+## Information Architecture Findings
+
+### IA1 — Navigation Structure
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### IA2 — Labeling Systems
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### IA3 — Search and Findability
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### IA4 — Organization Scheme
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
+### IA5 — Wayfinding
+**Severity:** [0–4]
+
+**Findings:**
+- [finding]
+
+**Recommendations:**
+- [recommendation]
+
+---
+
 ## Issue Summary Table
 
-| # | Heuristic | Severity | Issue |
-|---|-----------|----------|-------|
-| 1 | H1 — Visibility of System Status | [0–4] | [one-line description] |
-| 2 | H3 — User Control and Freedom | [0–4] | [one-line description] |
-| ... | | | |
+| # | Framework | Criterion | Severity | Issue |
+|---|-----------|-----------|----------|-------|
+| 1 | Nielsen | H1 — Visibility of System Status | [0–4] | [one-line description] |
+| 2 | Cognitive Load | CL3 — Progressive Disclosure | [0–4] | [one-line description] |
+| 3 | IA | IA2 — Labeling Systems | [0–4] | [one-line description] |
+| ... | | | | |
 
-*Sorted by severity descending.*
+*Sorted by severity descending. Include only issues with severity ≥ 1.*
 
 ---
 
@@ -125,7 +260,7 @@ Generate a Markdown file using this exact structure:
 
 ---
 
-*Report generated by the usability-report plugin using Nielsen's 10 Usability Heuristics.*
+*Report generated by the usability-report plugin · Nielsen's 10 Usability Heuristics · Cognitive Load Theory · Information Architecture Principles.*
 ```
 
 ## Behavior Rules
