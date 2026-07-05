@@ -1,5 +1,5 @@
 ---
-description: Prioritize your work at any point in the day. Runs morning kickoff or mid-day triage automatically based on today's memory graph state.
+description: Prioritize your work at any point in the day. Runs morning kickoff or mid-day triage automatically based on today's memory graph state. Use when the user says things like "what should I work on", "help me plan my day", "I need to prioritize", "morning kickoff", or "triage my tasks".
 ---
 
 # Work Prioritizer
@@ -15,14 +15,14 @@ This skill requires the `@modelcontextprotocol/server-memory` MCP server. Create
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
-        "MEMORY_FILE_PATH": "C:/Users/Rob/Downloads/Journal/memory/priority_graph.json"
+        "MEMORY_FILE_PATH": "~/Downloads/Journal/memory/priority_graph.json"
       }
     }
   }
 }
 ```
 
-> **Note:** Adjust `MEMORY_FILE_PATH` to match your actual journal path. The `memory/` subdirectory will be created automatically on first use. You only need to do this setup once.
+> **Note:** `~` expands to your home directory. The `memory/` subdirectory will be created automatically on first use. You only need to do this setup once.
 
 ---
 
@@ -30,7 +30,7 @@ This skill requires the `@modelcontextprotocol/server-memory` MCP server. Create
 
 **Step 1 — Verify MCP availability**
 
-Call `read_graph`. If the call fails or the tool is not available, stop immediately and display the full Setup section above verbatim. Do not proceed.
+Call `read_graph`. If the call fails or the tool is not available, display the full Setup section above verbatim, then offer to continue in **no-graph mode**: run the same Morning Kickoff or Triage conversation without persisting anything to the graph. Skip all `create_entities`, `create_relations`, and `add_observations` calls in no-graph mode, and tell the user their priorities won't be remembered across sessions until setup is complete.
 
 **Step 2 — Get today's date**
 
