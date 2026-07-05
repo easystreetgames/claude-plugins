@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "context-snapshot",
+  "description": "Rebuilds current_context.txt from all available artifacts — journal entries, priority graph, usability reports, and research notes. Run after a break or when context has drifted.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}

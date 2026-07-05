@@ -31,6 +31,11 @@
       "name": "research",
       "source": "./plugins/research",
       "description": "Iterative research assistant that dispatches subagents for broad overviews then user-directed deep dives, keeping the main context clean."
+    },
+    {
+      "name": "context-snapshot",
+      "source": "./plugins/context-snapshot",
+      "description": "Rebuilds current_context.txt from all available artifacts — journal entries, priority graph, usability reports, and research notes. Run after a break or when context has drifted."
     }
   ]
 }
