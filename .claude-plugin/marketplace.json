@@ -26,6 +26,11 @@
       "name": "introspection",
       "source": "./plugins/introspection",
       "description": "Reflective conversation partner that loads your journal history and priority graph to surface work patterns, stalled tasks, and recurring themes."
+    },
+    {
+      "name": "research",
+      "source": "./plugins/research",
+      "description": "Iterative research assistant that dispatches subagents for broad overviews then user-directed deep dives, keeping the main context clean."
     }
   ]
 }

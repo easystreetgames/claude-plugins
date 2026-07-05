@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "research",
+  "description": "Iterative research assistant that dispatches subagents for broad overviews then user-directed deep dives, keeping the main context clean.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
