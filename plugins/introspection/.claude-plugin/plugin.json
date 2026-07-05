@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "introspection",
+  "description": "Reflective conversation partner that loads your journal history and priority graph to surface work patterns, stalled tasks, and recurring themes.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}

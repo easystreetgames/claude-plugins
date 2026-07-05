@@ -1,0 +1,62 @@
+{
+  "skill_name": "introspect",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Let's do an introspection session.\n\nFor this test, treat the following as the content you found when loading context:\n\n[current_context.txt]\nProjects: Yahoo (Solitaire shipped, TriPeaks in progress), Intusic (stalled on team), Claude Plugins (journal + prioritize working)\nPeople: Eric (Yahoo PM), Jack (Yahoo tech lead), Jeremy (Intusic co-founder), Kim (Intusic artist)\n\n[2026-06-27.txt Todo section]\n- [ ] Write TriPeaks spec draft\n- [ ] Follow up with Jeremy on Intusic roadmap\n- [ ] Review Solitaire FTUE analytics\n\n[2026-06-28.txt Todo section]\n- [ ] Write TriPeaks spec draft\n- [ ] Review Solitaire FTUE analytics\n- [x] Push journal plugin fix\n\n[2026-06-29.txt Todo section]\n- [ ] Write TriPeaks spec draft\n- [ ] Follow up with Jeremy on Intusic roadmap\n- [ ] Set up Stratum prototype\n\n[2026-06-30.txt Todo section]\n- [ ] Write TriPeaks spec draft\n- [ ] Set up Stratum prototype\n\n[2026-07-01.txt Todo section]\n- [ ] Write TriPeaks spec draft\n- [ ] Set up Stratum prototype\n- [x] TriPeaks art direction meeting\n\n[Graph - task entities]\n- task:tripeaks-spec-draft: status: pending, priority: 1\n- task:solitaire-ftue-analytics: status: done\n- task:jeremy-intusic-roadmap: status: pending, priority: 2\n- task:stratum-prototype: status: pending, priority: 2\n\n[Graph - project entities]\n- project:yahoo\n- project:intusic\n- project:claude-plugins\n\nNow run the introspection skill. Have a brief 3-exchange conversation with the user (play both sides — you open with an observation, then the user responds with something plausible, then you follow up). After the third exchange, the user says 'that's all'. Then write the insight entities you would create. Show the full conversation and the graph writes.",
+      "expected_output": "Opens with a specific observation about the TriPeaks spec draft appearing unchecked in 5 consecutive journal entries despite being priority 1. Asks one probing question. Follows the thread in the simulated user response. Writes insight entities at the end with pattern descriptions and links to the relevant task.",
+      "assertions": [
+        {
+          "name": "opens-with-specific-observation",
+          "description": "First message is an observation grounded in the data (mentions specific task/count), not a generic question like 'what would you like to reflect on?'"
+        },
+        {
+          "name": "asks-one-question",
+          "description": "Each agent turn contains at most one question mark"
+        },
+        {
+          "name": "writes-insight-entities",
+          "description": "After 'that's all', shows JSON for create_entities with entityType: insight and observations including 'date:', 'pattern:', 'source: introspect'"
+        },
+        {
+          "name": "links-insight-to-task",
+          "description": "Shows create_relations JSON linking insight to task:tripeaks-spec-draft"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I want to think through some stuff about how my week went.\n\nFor this test, treat the following as the content you found when loading context:\n\n[current_context.txt]\nProjects: Yahoo (TriPeaks leading), Intusic (prototype phase), Claude Plugins\nPeople: Eric, Jack, Jeremy, Kim, Andrew (stakeholder)\n\n[2026-06-28.txt activities]\nSpent most of the day on TriPeaks card animations. Eric pinged about Solitaire analytics but I pushed back to tomorrow. Kim sent Intusic mockups — looks great but haven't had time to respond.\n\n[2026-06-29.txt activities]\nMore TriPeaks animation work. Jack and I debugged a layout issue for 2 hours. Eric followed up again on Solitaire analytics — told him next week.\n\n[2026-06-30.txt activities]\nTriPeaks art review with Andrew. Went well. Still haven't looked at Solitaire analytics or replied to Kim.\n\n[2026-07-01.txt activities]\nTriPeaks spec work. Kim sent a follow-up on Intusic. Told her I'd get back to her. Eric escalated the Solitaire analytics ask to Jack.\n\n[2026-07-02.txt activities]\nCaught up with Jack about the Eric situation. TriPeaks feels on track. Intusic is in my head but I can't figure out when to make time.\n\n[Graph - task entities]\n- task:solitaire-ftue-analytics: status: pending, priority: 1, note: Eric escalated to Jack\n- task:intusic-kim-mockup-review: status: pending, priority: 2\n- task:tripeaks-card-animations: status: done\n- task:tripeaks-spec: status: in_progress, priority: 1\n\nNow run the introspection skill. Have a 3-exchange conversation (you open, simulated user responds, you follow up). After the third exchange, user says 'done'. Show insight entities.",
+      "expected_output": "Opens with an observation about recurring pattern — either Eric/Solitaire analytics being delayed 4+ days or Kim being left waiting across multiple entries. Probes the thread with a single question. Writes insights at the end.",
+      "assertions": [
+        {
+          "name": "identifies-recurring-friction",
+          "description": "First message identifies a specific person (Eric or Kim) and a recurring pattern across multiple journal entries, not a generic observation"
+        },
+        {
+          "name": "no-unsolicited-advice",
+          "description": "Response does not contain phrases like 'you should', 'I recommend', 'you need to' unless the simulated user explicitly asked for advice"
+        },
+        {
+          "name": "writes-insight-entities",
+          "description": "After 'done', shows create_entities JSON with entityType: insight"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Let's reflect on my work.\n\nFor this test: when you try to read journal files, find none exist. When you call read_graph, it succeeds but returns an empty graph (no entities).\n\nRun the introspection skill and show what you do.",
+      "expected_output": "Gracefully handles missing data — tells the user it couldn't find journal files or graph data, and offers to have a freeform conversation instead. Does not crash, hallucinate data, or ask the user to run setup commands.",
+      "assertions": [
+        {
+          "name": "graceful-no-data",
+          "description": "Tells the user it found no journal files and/or an empty graph, without hallucinating fictional patterns"
+        },
+        {
+          "name": "offers-freeform",
+          "description": "Offers to continue the conversation without data rather than stopping entirely"
+        }
+      ]
+    }
+  ]
+}

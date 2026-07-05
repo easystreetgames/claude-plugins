@@ -21,6 +21,11 @@
       "name": "prioritize",
       "source": "./plugins/prioritize",
       "description": "Work prioritizer using a local MCP memory graph. Runs morning kickoff or mid-day triage based on today's graph state."
+    },
+    {
+      "name": "introspection",
+      "source": "./plugins/introspection",
+      "description": "Reflective conversation partner that loads your journal history and priority graph to surface work patterns, stalled tasks, and recurring themes."
     }
   ]
 }
