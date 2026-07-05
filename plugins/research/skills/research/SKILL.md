@@ -39,7 +39,33 @@ Repeat Phase 2 as many times as the user wants.
 
 **Phase 3 — Close**
 
-When the user says they're done, offer a brief synthesis (3–5 bullets) connecting the aspects they explored, then stop.
+When the user says they're done, offer a brief synthesis (3–5 bullets) connecting the aspects they explored.
+
+---
+
+**Phase 4 — Save artifact**
+
+After the synthesis, write a markdown artifact to `~/Downloads/Journal/research/<topic-slug>-<YYYY-MM-DD>.md` with this structure:
+
+```markdown
+# Research: <Topic>
+*<YYYY-MM-DD>*
+
+## Overview
+<broad sweep — numbered list with summaries>
+
+## Deep Dives
+### <Aspect 1>
+<findings>
+
+### <Aspect 2>
+<findings>
+
+## Synthesis
+<3–5 bullets from Phase 3>
+```
+
+Tell the user the file was saved and its path. Don't ask permission — just save it.
 
 ## Rules
 

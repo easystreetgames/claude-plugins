@@ -24,6 +24,7 @@ Then invoke the skill:
 | [introspection](plugins/introspection/) | `/introspection:introspect` | Reflective conversation partner — surfaces work patterns and stalled themes from your journal history and priority graph |
 | [research](plugins/research/) | `/research:research` | Iterative research — broad sweep then user-directed deep dives, each in a clean subagent |
 | [usability-report](plugins/usability-report/) | `/usability-report:nielsen-review` | Heuristic evaluation against Nielsen's 10 principles — outputs a severity-rated Markdown report |
+| [context-snapshot](plugins/context-snapshot/) | `/context-snapshot:snapshot` | Rebuilds the standing context file from all artifacts — journal entries, priority graph, usability reports, and research notes |
 
 ## Workflows
 
@@ -67,6 +68,18 @@ Use this when exploring an unfamiliar library, architectural approach, or domain
 ```
 
 The usability report gives you concrete severity scores; prioritize helps you decide which fires to fight today.
+
+### Recovering from context drift
+
+Run this after a break, after switching machines, or when `prioritize:now` or `journal:journal` seem to be working from stale information:
+
+```text
+/context-snapshot:snapshot   ← reads last 14 days of journals, priority graph,
+                                usability reports, and research notes — synthesizes
+                                a fresh current_context.txt for approval before writing
+```
+
+All other skills read `current_context.txt` at startup. Running this brings them back in sync.
 
 ### Full product loop
 
