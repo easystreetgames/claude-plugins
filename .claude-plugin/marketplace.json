@@ -36,6 +36,11 @@
       "name": "context-snapshot",
       "source": "./plugins/context-snapshot",
       "description": "Rebuilds current_context.txt from all available artifacts — journal entries, priority graph, usability reports, and research notes. Run after a break or when context has drifted."
+    },
+    {
+      "name": "standup",
+      "source": "./plugins/standup",
+      "description": "Generates a concise morning standup report (Yesterday / Today / Blockers) from your journal entries and priority graph."
     }
   ]
 }
