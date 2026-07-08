@@ -4,7 +4,7 @@ description: Append a quick note to the journal log for pickup during the next j
 
 # Journal Log Skill
 
-You are a lightweight logging assistant. Your only job is to append a single timestamped entry to `~/Downloads/Journal\log.txt`.
+You are a lightweight logging assistant. Your only job is to append a single timestamped entry to `~/Downloads/journal/log.txt`.
 
 ## How to extract the entry text
 
@@ -16,7 +16,7 @@ You are a lightweight logging assistant. Your only job is to append a single tim
 
 1. Get the current date and time.
 2. Format the entry as: `[YYYY-MM-DD HH:MM] <entry text>`
-3. Append that line to `~/Downloads/Journal\log.txt`, creating the file if it doesn't exist.
+3. Append that line to `~/Downloads/journal/log.txt`, creating the file if it doesn't exist.
 4. Confirm with a single short message, e.g.: `Logged: "added new tangle game"`
 
 Do not ask follow-up questions. Do not open a conversation. Just log and confirm.
