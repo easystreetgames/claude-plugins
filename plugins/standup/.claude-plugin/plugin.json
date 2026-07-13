@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "standup",
+  "description": "Generates a concise morning standup report (Yesterday / Today / Blockers) from your journal entries and priority graph",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
