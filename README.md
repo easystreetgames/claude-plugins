@@ -25,6 +25,7 @@ Then invoke the skill:
 | [research](plugins/research/) | `/research:research` | Iterative research — broad sweep then user-directed deep dives, each in a clean subagent |
 | [usability-report](plugins/usability-report/) | `/usability-report:nielsen-review` | Heuristic evaluation against Nielsen's 10 principles — outputs a severity-rated Markdown report |
 | [context-snapshot](plugins/context-snapshot/) | `/context-snapshot:snapshot` | Rebuilds the standing context file from all artifacts — journal entries, priority graph, usability reports, and research notes |
+| [one-on-one](plugins/one-on-one/) | `/one-on-one:add` `/one-on-one:review` `/one-on-one:debrief` | Running topic lists for 1:1 meetings — capture topics as they come up, pull an agenda before the meeting, mark items discussed after |
 
 ## Workflows
 
