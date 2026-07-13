@@ -24,18 +24,73 @@ README.md                              ← marketplace overview
 
 ## Adding a new plugin
 
-1. Create `plugins/<name>/` with the structure above.
-2. `plugin.json` minimum fields: `name`, `description`, `version`, `skills` (path to skills dir).
-3. `SKILL.md` requires YAML frontmatter with a `description` field; the body is the prompt:
+### 1. Create the plugin directory
 
-   ```yaml
-   ---
-   description: One-line description shown in skill picker
-   ---
-   ```
+```text
+plugins/<name>/
+  .claude-plugin/plugin.json
+  skills/<skill-name>/SKILL.md   ← one directory per skill/slash command
+  README.md
+```
 
-4. Register the plugin in `.claude-plugin/marketplace.json` under `plugins[]` with a `name` and `"source": "./plugins/<name>"`.
-5. Bump `version` in `plugin.json` on every release — Claude Code uses this to detect updates.
+### 2. Write `plugin.json`
+
+Minimum required fields:
+
+```json
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "my-plugin",
+  "description": "One-line description of what this plugin does.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
+```
+
+Bump `version` on every release — Claude Code uses this to detect updates.
+
+### 3. Write each `SKILL.md`
+
+Each subdirectory under `skills/` becomes one slash command: `/<plugin-name>:<skill-dir-name>`.
+
+`SKILL.md` requires a YAML frontmatter `description`; the rest is the prompt body:
+
+```yaml
+---
+description: One-line description shown in skill picker
+---
+
+# Skill title
+
+Your full system prompt goes here.
+```
+
+A plugin with multiple skills gets multiple directories — one per command:
+
+```text
+skills/
+  add/SKILL.md      → /my-plugin:add
+  review/SKILL.md   → /my-plugin:review
+  debrief/SKILL.md  → /my-plugin:debrief
+```
+
+To remove a skill, delete its directory.
+
+### 4. Write `README.md`
+
+User-facing docs for the plugin. Cover install command, each slash command with a one-line description, and any storage or dependencies (e.g. MCP memory graph).
+
+### 5. Register in the marketplace
+
+Add an entry to `.claude-plugin/marketplace.json` under `plugins[]`:
+
+```json
+{
+  "name": "my-plugin",
+  "source": "./plugins/my-plugin",
+  "description": "Same one-liner as plugin.json."
+}
+```
 
 ## Testing locally
 

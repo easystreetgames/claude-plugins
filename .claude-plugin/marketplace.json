@@ -36,6 +36,11 @@
       "name": "context-snapshot",
       "source": "./plugins/context-snapshot",
       "description": "Rebuilds current_context.txt from all available artifacts — journal entries, priority graph, usability reports, and research notes. Run after a break or when context has drifted."
+    },
+    {
+      "name": "one-on-one",
+      "source": "./plugins/one-on-one",
+      "description": "Manage one-on-one conversation threads — capture topics to discuss with specific people and review them before each meeting."
     }
   ]
 }

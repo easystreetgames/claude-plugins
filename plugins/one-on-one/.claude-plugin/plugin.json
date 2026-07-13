@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "one-on-one",
+  "description": "Manage one-on-one conversation threads — capture topics to discuss with specific people and review them before each meeting.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
