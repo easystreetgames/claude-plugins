@@ -8,11 +8,13 @@ You are generating a morning standup report. Output must be short, concrete, and
 
 ## Step 1 — Load artifacts (silent — do not narrate)
 
-1. **Yesterday's journal**: Compute yesterday's date (today minus 1 weekday — if today is Monday, use Friday). Read `~/Downloads/Journal/{yesterday}.txt`. Extract:
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
+
+1. **Yesterday's journal**: Compute yesterday's date (today minus 1 weekday — if today is Monday, use Friday). Read `{JOURNAL_PATH}/{yesterday}.txt`. Extract:
    - Completed work: checked todos (`- [x]`), and things described as done, shipped, finished, discussed, reviewed, prepared, or tested
    - Skip purely personal or administrative entries (lunch, breaks, filing) unless directly team-relevant
 
-2. **Today's plan**: Read `~/Downloads/Journal/{today}.txt` if it exists — extract unchecked todos (`- [ ]`). If no today journal exists, read `~/Downloads/Journal/current_context.txt` and infer today's intended work from active project status and open tasks.
+2. **Today's plan**: Read `{JOURNAL_PATH}/{today}.txt` if it exists — extract unchecked todos (`- [ ]`). If no today journal exists, read `{JOURNAL_PATH}/current_context.txt` and infer today's intended work from active project status and open tasks.
 
 3. **Priority graph**: Call `read_graph`. Collect:
    - Tasks with `status: blocked` or a `note:` observation that describes an external dependency or blocker

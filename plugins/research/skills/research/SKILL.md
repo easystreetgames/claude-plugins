@@ -45,7 +45,9 @@ When the user says they're done, offer a brief synthesis (3–5 bullets) connect
 
 **Phase 4 — Save artifact**
 
-After the synthesis, write a markdown artifact to `~/Downloads/Journal/research/<topic-slug>-<YYYY-MM-DD>.md` with this structure:
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`. Create `{JOURNAL_PATH}/research/` if it does not exist.
+
+After the synthesis, write a markdown artifact to `{JOURNAL_PATH}/research/<topic-slug>-<YYYY-MM-DD>.md` with this structure:
 
 ```markdown
 # Research: <Topic>

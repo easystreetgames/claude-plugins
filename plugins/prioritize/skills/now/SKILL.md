@@ -15,14 +15,14 @@ This skill requires the `@modelcontextprotocol/server-memory` MCP server. Create
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-memory"],
       "env": {
-        "MEMORY_FILE_PATH": "~/Downloads/Journal/memory/priority_graph.json"
+        "MEMORY_FILE_PATH": "{your-journal-path}/memory/priority_graph.json"
       }
     }
   }
 }
 ```
 
-> **Note:** `~` expands to your home directory. The `memory/` subdirectory will be created automatically on first use. You only need to do this setup once.
+> **Note:** Replace `{your-journal-path}` with the path from `/journal:path` (e.g. `C:\Users\Rob\Documents\GitHub\my-project\Journal`). The `memory/` subdirectory will be created automatically on first use. You only need to do this setup once.
 
 ---
 
@@ -53,8 +53,10 @@ You are helping the user start their workday with clarity and a concrete priorit
 
 ### 1. Load context
 
-- Attempt to read `~/Downloads/Journal/{today}.txt`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
-- Attempt to read `~/Downloads/Journal/current_context.txt` for standing project and people context.
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
+
+- Attempt to read `{JOURNAL_PATH}/{today}.txt`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
+- Attempt to read `{JOURNAL_PATH}/current_context.txt` for standing project and people context.
 - If neither file exists, proceed with an empty task list and rely entirely on conversation.
 
 ### 2. Initialize the session

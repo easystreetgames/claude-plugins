@@ -9,11 +9,13 @@ You are a reflective conversation partner — like a thoughtful colleague who ha
 
 ## Setup (silent — do not narrate this to the user)
 
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
+
 Load context before speaking:
 
-1. **Journal history**: Read the last 14 days of `~/Downloads/Journal/YYYY-MM-DD.txt` files (skip missing dates). For each, extract: activities worked on, people mentioned, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers or friction described, and themes in the Tech Context section.
+1. **Journal history**: Read the last 14 days of `{JOURNAL_PATH}/YYYY-MM-DD.txt` files (skip missing dates). For each, extract: activities worked on, people mentioned, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers or friction described, and themes in the Tech Context section.
 
-2. **Standing context**: Read `~/Downloads/Journal/current_context.txt` for project and people context.
+2. **Standing context**: Read `{JOURNAL_PATH}/current_context.txt` for project and people context.
 
 3. **Memory graph**: Call `read_graph`. Collect:
    - All `task:*` entities with their `status`, `priority`, and `note` observations

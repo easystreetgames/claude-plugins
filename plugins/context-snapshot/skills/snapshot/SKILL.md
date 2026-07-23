@@ -5,21 +5,29 @@ description: Rebuild current_context.txt from all available artifacts (journal e
 
 # Context Snapshot
 
-You are rebuilding `~/Downloads/Journal/current_context.txt` — the standing context file that `prioritize:now` and the journal skill read at the start of every session. Your job is to synthesize all available artifacts into a fresh, accurate snapshot of the user's current projects, status, and people.
+You are rebuilding `current_context.txt` — the standing context file that `prioritize:now` and the journal skill read at the start of every session. Your job is to synthesize all available artifacts into a fresh, accurate snapshot of the user's current projects, status, and people.
+
+## Journal Path (silent — do not narrate this step)
+
+Before any file operations, determine the journal folder:
+1. Read `.claude/journal-path.txt` in the current working directory.
+2. If found, use that path as `JOURNAL_PATH`.
+3. If not found, use `./journal` as `JOURNAL_PATH`.
+4. Create `JOURNAL_PATH` if it does not exist.
 
 ## Step 1 — Load artifacts (silent — do not narrate this to the user)
 
 Gather everything before speaking:
 
-1. **Recent journals**: Read the last 14 days of `~/Downloads/Journal/YYYY-MM-DD.txt` files (skip missing dates). For each, extract: projects mentioned, people, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers, and any status updates.
+1. **Recent journals**: Read the last 14 days of `{JOURNAL_PATH}/YYYY-MM-DD.txt` files (skip missing dates). For each, extract: projects mentioned, people, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers, and any status updates.
 
-2. **Existing context file**: Read `~/Downloads/Journal/current_context.txt`. Treat this as a starting point — it may be stale but it's the best baseline you have.
+2. **Existing context file**: Read `{JOURNAL_PATH}/current_context.txt`. Treat this as a starting point — it may be stale but it's the best baseline you have.
 
 3. **Priority graph**: Call `read_graph`. Collect all `task:*` and `project:*` entities with their `status`, `priority`, and `note` observations. Note which tasks are done vs. still open. Skip silently if unavailable.
 
-4. **Usability reports**: Look for files matching `~/Downloads/Journal/usability-report-*.md` and `~/Downloads/Journal/usability-*.md`. For any found, note the subject, date, and any severity-3 or severity-4 findings that haven't been resolved.
+4. **Usability reports**: Look for files matching `{JOURNAL_PATH}/usability-report-*.md` and `{JOURNAL_PATH}/usability-*.md`. For any found, note the subject, date, and any severity-3 or severity-4 findings that haven't been resolved.
 
-5. **Research notes**: Look for files in `~/Downloads/Journal/research/` and matching `~/Downloads/Journal/research-*.md`. For any found within the last 30 days, note the topic and whether it produced a concrete recommendation.
+5. **Research notes**: Look for files in `{JOURNAL_PATH}/research/` and matching `{JOURNAL_PATH}/research-*.md`. For any found within the last 30 days, note the topic and whether it produced a concrete recommendation.
 
 If no artifacts at all exist, tell the user and stop — there is nothing to synthesize.
 
@@ -89,4 +97,4 @@ Apply any requested changes and re-confirm. Do not write the file until the user
 
 ## Step 5 — Write
 
-Overwrite `~/Downloads/Journal/current_context.txt` with the approved content. Confirm success in one sentence.
+Overwrite `{JOURNAL_PATH}/current_context.txt` with the approved content. Confirm success in one sentence.

@@ -269,5 +269,5 @@ Generate a Markdown file using this exact structure:
 - If a heuristic is well-satisfied, say so briefly and assign severity 0 rather than skipping it.
 - Keep findings evidence-based. Do not speculate without noting it as an assumption.
 - Sort the Issue Summary Table by severity descending (4 first, 0 last).
-- After generating the report, save it as a `.md` file at `~/Downloads/Journal/usability-report-[target-slug]-YYYY-MM-DD.md`.
+- After generating the report, determine the journal folder: read `.claude/journal-path.txt`; if found use that path, otherwise use `./journal`. Save the report as a `.md` file at `{JOURNAL_PATH}/usability-report-[target-slug]-YYYY-MM-DD.md`.
 - Confirm the file path to the user when done.

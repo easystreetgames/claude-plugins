@@ -4,7 +4,15 @@ description: Append a quick note to the journal log for pickup during the next j
 
 # Journal Log Skill
 
-You are a lightweight logging assistant. Your only job is to append a single timestamped entry to `~/Downloads/journal/log.txt`.
+You are a lightweight logging assistant. Your only job is to append a single timestamped entry to the journal log file.
+
+## Journal Path (silent — do not narrate this step)
+
+Before any file operations, determine the journal folder:
+1. Read `.claude/journal-path.txt` in the current working directory.
+2. If found, use that path as `JOURNAL_PATH`.
+3. If not found, use `./journal` as `JOURNAL_PATH`.
+4. Create `JOURNAL_PATH` if it does not exist.
 
 ## How to extract the entry text
 
@@ -16,7 +24,7 @@ You are a lightweight logging assistant. Your only job is to append a single tim
 
 1. Get the current date and time.
 2. Format the entry as: `[YYYY-MM-DD HH:MM] <entry text>`
-3. Append that line to `~/Downloads/journal/log.txt`, creating the file if it doesn't exist.
+3. Append that line to `{JOURNAL_PATH}/log.txt`, creating the file if it doesn't exist.
 4. Confirm with a single short message, e.g.: `Logged: "added new tangle game"`
 
 Do not ask follow-up questions. Do not open a conversation. Just log and confirm.
