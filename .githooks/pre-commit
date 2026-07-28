@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Enforce version bumps: if any file under plugins/<name>/ is staged,
+# the corresponding plugin.json must also be staged with a changed version.
+
+set -euo pipefail
+
+failed=0
+
+# Collect distinct plugin names with staged changes (excluding plugin.json itself)
+changed_plugins=$(git diff --cached --name-only \
+  | grep '^plugins/' \
+  | grep -v '\.claude-plugin/plugin\.json' \
+  | sed 's|^plugins/\([^/]*\)/.*|\1|' \
+  | sort -u || true)
+
+for plugin in $changed_plugins; do
+  manifest="plugins/$plugin/.claude-plugin/plugin.json"
+
+  # If the manifest doesn't exist, skip (shouldn't happen but be safe)
+  [ -f "$manifest" ] || continue
+
+  # Check whether plugin.json is staged at all
+  if ! git diff --cached --name-only | grep -q "^$manifest$"; then
+    echo "❌  $plugin: plugin files changed but plugin.json not staged — bump the version"
+    failed=1
+    continue
+  fi
+
+  # Check whether the version line actually changed
+  old_version=$(git show HEAD:"$manifest" 2>/dev/null | grep '"version"' | grep -o '[0-9][0-9.]*' || true)
+  new_version=$(git show :"$manifest" 2>/dev/null | grep '"version"' | grep -o '[0-9][0-9.]*' || true)
+
+  if [ "$old_version" = "$new_version" ]; then
+    echo "❌  $plugin: plugin.json is staged but version is unchanged ($old_version) — bump it"
+    failed=1
+  fi
+done
+
+if [ "$failed" -eq 1 ]; then
+  echo ""
+  echo "Fix the version(s) above and re-stage plugin.json before committing."
+  exit 1
+fi
+
+exit 0

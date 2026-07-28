@@ -99,3 +99,13 @@ Each plugin lives in `plugins/<name>/` with:
 - `README.md` — what it does and how to use it
 - `.claude-plugin/plugin.json` — plugin manifest (name, version, skills paths)
 - `skills/<skill-name>/SKILL.md` — the skill prompt with frontmatter description
+
+### Dev setup
+
+After cloning, activate the pre-commit hook that enforces version bumps:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The hook blocks commits that modify plugin files without bumping the version in `plugin.json`.
