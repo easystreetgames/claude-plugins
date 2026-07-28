@@ -41,8 +41,8 @@ The MCP server is started by Claude Code on launch — a restart is required aft
 ```
 
 **First invocation of the day** → Morning kickoff mode:
-- Reads today's journal (`YYYY-MM-DD.txt`) and extracts unchecked todos
-- Reads `current_context.txt` for project context
+- Reads today's journal (`YYYY-MM-DD.md`) and extracts unchecked todos
+- Reads `current_context.md` for project context
 - Asks two questions, then outputs your top 3 priorities with rationale
 
 **Any subsequent invocation** → Triage mode:

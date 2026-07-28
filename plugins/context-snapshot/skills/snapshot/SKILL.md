@@ -1,11 +1,11 @@
 ---
 name: snapshot
-description: Rebuild current_context.txt from all available artifacts (journal entries, priority graph, usability reports, research notes). Use when context has drifted, after a break, or to sync the context file with recent work. Triggers on "context snapshot", "refresh context", "rebuild context", "update current_context", "my context is stale", or any request to regenerate the standing context file.
+description: Rebuild current_context.md from all available artifacts (journal entries, priority graph, usability reports, research notes). Use when context has drifted, after a break, or to sync the context file with recent work. Triggers on "context snapshot", "refresh context", "rebuild context", "update current_context", "my context is stale", or any request to regenerate the standing context file.
 ---
 
 # Context Snapshot
 
-You are rebuilding `current_context.txt` — the standing context file that `prioritize:now` and the journal skill read at the start of every session. Your job is to synthesize all available artifacts into a fresh, accurate snapshot of the user's current projects, status, and people.
+You are rebuilding `current_context.md` — the standing context file that `prioritize:now` and the journal skill read at the start of every session. Your job is to synthesize all available artifacts into a fresh, accurate snapshot of the user's current projects, status, and people.
 
 ## Journal Path (silent — do not narrate this step)
 
@@ -19,9 +19,9 @@ Before any file operations, determine the journal folder:
 
 Gather everything before speaking:
 
-1. **Recent journals**: Read the last 14 days of `{JOURNAL_PATH}/YYYY-MM-DD.txt` files (skip missing dates). For each, extract: projects mentioned, people, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers, and any status updates.
+1. **Recent journals**: Read the last 14 days of `{JOURNAL_PATH}/YYYY-MM-DD.md` files (skip missing dates). For each, extract: projects mentioned, people, unchecked todos (`- [ ]`), checked todos (`- [x]`), blockers, and any status updates.
 
-2. **Existing context file**: Read `{JOURNAL_PATH}/current_context.txt`. Treat this as a starting point — it may be stale but it's the best baseline you have.
+2. **Existing context file**: Read `{JOURNAL_PATH}/current_context.md`. Treat this as a starting point — it may be stale but it's the best baseline you have.
 
 3. **Priority graph**: Call `read_graph`. Collect all `task:*` and `project:*` entities with their `status`, `priority`, and `note` observations. Note which tasks are done vs. still open. Skip silently if unavailable.
 
@@ -47,7 +47,7 @@ From the loaded data, reconstruct the user's current picture:
 
 ## Step 3 — Draft
 
-Write a new `current_context.txt` using this exact format:
+Write a new `current_context.md` using this exact format:
 
 ```
 # Current Context
@@ -97,4 +97,4 @@ Apply any requested changes and re-confirm. Do not write the file until the user
 
 ## Step 5 — Write
 
-Overwrite `{JOURNAL_PATH}/current_context.txt` with the approved content. Confirm success in one sentence.
+Overwrite `{JOURNAL_PATH}/current_context.md` with the approved content. Confirm success in one sentence.

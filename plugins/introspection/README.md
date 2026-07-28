@@ -22,7 +22,7 @@ It asks one question at a time and follows the conversation wherever you take it
 
 ## Dependencies
 
-- **Journal files**: `~/Downloads/Journal/YYYY-MM-DD.txt` — reads the last 14 days
+- **Journal files**: `~/Downloads/Journal/YYYY-MM-DD.md` — reads the last 14 days
 - **MCP memory graph**: reads tasks, projects, and prior insights; writes updates as the conversation unfolds. Falls back to journal-only if the graph is unavailable.
 
 ## Works well with

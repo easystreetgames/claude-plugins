@@ -55,8 +55,8 @@ You are helping the user start their workday with clarity and a concrete priorit
 
 **Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
 
-- Attempt to read `{JOURNAL_PATH}/{today}.txt`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
-- Attempt to read `{JOURNAL_PATH}/current_context.txt` for standing project and people context.
+- Attempt to read `{JOURNAL_PATH}/{today}.md`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
+- Attempt to read `{JOURNAL_PATH}/current_context.md` for standing project and people context.
 - If neither file exists, proceed with an empty task list and rely entirely on conversation.
 
 ### 2. Initialize the session
@@ -79,7 +79,7 @@ For each unchecked todo item extracted in step 1:
    [{ "name": "task:{slug}", "entityType": "task", "observations": ["status: pending"] }]
    ```
 
-3. If you can identify the relevant project from `current_context.txt` (e.g. Solitaire → `project:solitaire`, Intusic → `project:intusic`, ESG → `project:esg`), call `create_entities` for that project entity if it doesn't already exist, then call `create_relations`:
+3. If you can identify the relevant project from `current_context.md` (e.g. Solitaire → `project:solitaire`, Intusic → `project:intusic`, ESG → `project:esg`), call `create_entities` for that project entity if it doesn't already exist, then call `create_relations`:
    ```json
    [{ "from": "task:{slug}", "to": "project:{project-slug}", "relationType": "belongs_to" }]
    ```

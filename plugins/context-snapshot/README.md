@@ -1,10 +1,10 @@
 # context-snapshot
 
-Rebuilds `current_context.txt` — the standing context file read by `prioritize:now` and the journal skill — from all available artifacts.
+Rebuilds `current_context.md` — the standing context file read by `prioritize:now` and the journal skill — from all available artifacts.
 
 ## When to use
 
-- After a long break when `current_context.txt` has gone stale
+- After a long break when `current_context.md` has gone stale
 - When you've been journaling regularly but context has drifted from reality
 - After completing a major project phase (shipped, stalled, pivoted)
 - Any time you want to force a clean sync of all plugin artifacts
@@ -13,7 +13,7 @@ Rebuilds `current_context.txt` — the standing context file read by `prioritize
 
 | Artifact | Source |
 |----------|--------|
-| Recent journal entries | `~/Downloads/Journal/YYYY-MM-DD.txt` (last 14 days) |
+| Recent journal entries | `~/Downloads/Journal/YYYY-MM-DD.md` (last 14 days) |
 | Priority graph | MCP memory server (`read_graph`) |
 | Usability reports | `~/Downloads/Journal/usability-report-*.md` |
 | Research notes | `~/Downloads/Journal/research/` and `research-*.md` |
@@ -22,7 +22,7 @@ Missing artifacts are skipped gracefully — the skill works with whatever is av
 
 ## What it produces
 
-An updated `~/Downloads/Journal/current_context.txt` with:
+An updated `~/Downloads/Journal/current_context.md` with:
 - Active project status (what shipped, what's in progress, what's next)
 - Current people and their roles
 - Active technical stacks
@@ -42,5 +42,5 @@ The skill shows a draft and a change summary before writing. You approve before 
 
 No additional setup required. Optionally pairs with:
 - `prioritize` — shares the same MCP memory graph
-- `journal` — both read and write `current_context.txt`
+- `journal` — both read and write `current_context.md`
 - `introspection` — reads the same journal entries

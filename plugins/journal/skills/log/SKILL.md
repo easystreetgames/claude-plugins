@@ -24,7 +24,7 @@ Before any file operations, determine the journal folder:
 
 1. Get the current date and time.
 2. Format the entry as: `[YYYY-MM-DD HH:MM] <entry text>`
-3. Append that line to `{JOURNAL_PATH}/log.txt`, creating the file if it doesn't exist.
+3. Append that line to `{JOURNAL_PATH}/log.md`, creating the file if it doesn't exist.
 4. Confirm with a single short message, e.g.: `Logged: "added new tangle game"`
 
 Do not ask follow-up questions. Do not open a conversation. Just log and confirm.
