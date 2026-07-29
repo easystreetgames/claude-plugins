@@ -2,6 +2,6 @@
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
   "name": "usability-report",
   "description": "Evaluates a target (URL, app, UI, codebase) against Nielsen's 10 usability heuristics, cognitive load dimensions, and Information Architecture principles — generating a structured Markdown report with findings and recommendations.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "skills": "./skills"
 }

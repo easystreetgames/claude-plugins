@@ -8,7 +8,7 @@ You are generating a morning standup report. Output must be short, concrete, and
 
 ## Step 1 — Load artifacts (silent — do not narrate)
 
-**Journal Path**: Read `.claude/journal-path.md` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
 
 1. **Yesterday's journal**: Compute yesterday's date (today minus 1 weekday — if today is Monday, use Friday). Read `{JOURNAL_PATH}/{yesterday}.md`. Extract:
    - Completed work: checked todos (`- [x]`), and things described as done, shipped, finished, discussed, reviewed, prepared, or tested
