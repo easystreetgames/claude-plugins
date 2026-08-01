@@ -13,16 +13,18 @@ Rebuilds `current_context.md` — the standing context file read by `prioritize:
 
 | Artifact | Source |
 |----------|--------|
-| Recent journal entries | `~/Downloads/Journal/YYYY-MM-DD.md` (last 14 days) |
-| Priority graph | MCP memory server (`read_graph`) |
-| Usability reports | `~/Downloads/Journal/usability-report-*.md` |
-| Research notes | `~/Downloads/Journal/research/` and `research-*.md` |
+| Recent journal entries | `{JOURNAL_PATH}/YYYY-MM-DD.md` (last 14 days) |
+| Priority graph | MCP memory server (`read_graph`) — lean open-task index |
+| Log file | `{JOURNAL_PATH}/log.md` |
+| Insights | `{JOURNAL_PATH}/insights/*.md` |
+| Usability reports | `{JOURNAL_PATH}/usability-report-*.md` |
+| Research notes | `{JOURNAL_PATH}/research/` and `research-*.md` |
 
 Missing artifacts are skipped gracefully — the skill works with whatever is available.
 
 ## What it produces
 
-An updated `~/Downloads/Journal/current_context.md` with:
+An updated `{JOURNAL_PATH}/current_context.md` with:
 - Active project status (what shipped, what's in progress, what's next)
 - Current people and their roles
 - Active technical stacks

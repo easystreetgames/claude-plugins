@@ -17,11 +17,16 @@ Load context before speaking:
 
 2. **Standing context**: Read `{JOURNAL_PATH}/current_context.md` for project and people context.
 
-3. **Memory graph**: Call `read_graph`. Collect:
-   - All `task:*` entities with their `status`, `priority`, and `note` observations
+3. **Log file**: Read `{JOURNAL_PATH}/log.md` if it exists for mid-session notes not yet journaled.
+
+4. **Prior insights**: List files in `{JOURNAL_PATH}/insights/` (create the directory later only when writing). For each `*.md` found, note the slug/date and one-line pattern so you do not re-surface the same insight.
+
+5. **Memory graph**: Call `read_graph`. Collect:
+   - All `task:*` entities with their latest `status`, `priority`, and optional `ref:` observations
    - All `project:*` entities
-   - All `insight:*` entities from prior sessions (to avoid surfacing the same pattern twice)
    - Any `blocks` relations
+
+   Follow **Memory Graph Hygiene** from the `prioritize` skill: the graph is a lean index. Ignore legacy free-form `note:` / `insight:*` blobs if present; prefer files for narrative.
 
 If `read_graph` is unavailable, proceed with journal files only and skip all graph writes. If no journal files exist either, tell the user and offer a freeform conversation instead.
 
@@ -36,7 +41,7 @@ With your loaded context, look for the most concrete examples of:
 - **Recurring friction**: Same blocker, person, or theme appearing across multiple entries
 - **Energy signals**: Entries that read as more engaged or more drained — look for contrast
 
-Cross-reference with existing `insight:*` entities — avoid re-surfacing patterns from a previous session unless new data changes them.
+Cross-reference with existing files in `insights/` — avoid re-surfacing patterns from a previous session unless new data changes them.
 
 Pick the most interesting, specific pattern to open with.
 
@@ -54,7 +59,7 @@ Then ask one question and wait for the full response. Follow the thread wherever
 
 When surfacing the next pattern, open with another specific observation. There's always another thread.
 
-**End when**: the user says "that's all", "done", or clearly signals they want to stop. Then write graph updates (see below) and confirm briefly.
+**End when**: the user says "that's all", "done", or clearly signals they want to stop. Then write insight files (see below) and confirm briefly.
 
 ## Conversation principles
 
@@ -66,21 +71,34 @@ When surfacing the next pattern, open with another specific observation. There's
 
 ## Updating the graph during conversation
 
-As the conversation unfolds and the user confirms or clarifies a pattern, update the affected task entities immediately — don't wait until the end. Skip all graph writes silently if `read_graph` was unavailable.
+As the conversation unfolds and the user confirms or clarifies a pattern, update affected task entities immediately — don't wait until the end. Skip all graph writes silently if `read_graph` was unavailable.
+
+Follow hygiene: **replace, don't append** status/priority (delete prior keyed observations, then add). **No free-form `note:`** — append reasons to `{JOURNAL_PATH}/log.md` instead.
 
 **Task confirmed as stalled** (user acknowledges a task hasn't moved and knows why):
-```json
-[{ "entityName": "task:{slug}", "contents": ["note: stalled {YYYY-MM-DD} — {one-phrase reason from user}"] }]
+
+Append to log:
 ```
+[YYYY-MM-DD HH:MM] stalled {task-slug} — {one-phrase reason from user}
+```
+Optionally set `ref: log.md` on the task (replace any prior `ref:`). Leave status as-is unless the user says it's blocked.
 
 **Priority revealed to have shifted** (user confirms they've de-prioritized or re-prioritized):
+
+Delete existing `priority:*` observations, then:
 ```json
 [{ "entityName": "task:{slug}", "contents": ["priority: {new-value}"] }]
 ```
 
 **New blocker surfaced** (user names a specific thing blocking a task):
+
+Append to log:
+```
+[YYYY-MM-DD HH:MM] blocked {task-slug} — {reason}
+```
+Delete existing `status:*` observations, then:
 ```json
-[{ "entityName": "task:{blocker-slug}", "contents": ["status: blocked", "note: blocked by {reason}"] }]
+[{ "entityName": "task:{slug}", "contents": ["status: blocked", "ref: log.md"] }]
 ```
 Then link if another task is the cause:
 ```json
@@ -89,51 +107,44 @@ Then link if another task is the cause:
 
 **New task surfaced** (a dropped thread the user wants to pick up):
 ```json
-[{ "name": "task:{slug}", "entityType": "task", "observations": ["status: pending", "note: surfaced in introspect {YYYY-MM-DD}"] }]
+[{ "name": "task:{slug}", "entityType": "task", "observations": ["status: pending"] }]
 ```
-Then link to project if known:
+Append a one-liner to `log.md` noting it was surfaced in introspect. Link to project if known:
 ```json
 [{ "from": "task:{slug}", "to": "project:{project-slug}", "relationType": "belongs_to" }]
 ```
 
-## Writing insights to the graph
+## Writing insights to files
 
-After the user ends the session, write each meaningful pattern that surfaced as an `insight:` entity:
+After the user ends the session, write each meaningful pattern that surfaced as a markdown file under `{JOURNAL_PATH}/insights/`. Create the `insights/` directory if needed. Do **not** create heavy `insight:*` entities in the graph.
 
-**Create entity:**
-```json
-[{
-  "name": "insight:{kebab-slug-of-pattern}",
-  "entityType": "insight",
-  "observations": [
-    "date: YYYY-MM-DD",
-    "pattern: {one-sentence description of what was noticed}",
-    "source: introspect"
-  ]
-}]
+**File path:** `{JOURNAL_PATH}/insights/YYYY-MM-DD-{kebab-slug}.md`
+
+**File contents:**
+```markdown
+---
+date: YYYY-MM-DD
+pattern: {one-sentence description of what was noticed}
+source: introspect
+tasks: [task:{slug}, ...]
+projects: [project:{slug}, ...]
+---
+
+{Optional 1–3 sentences of context from the conversation.}
 ```
 
-**Link to relevant task or project (where applicable):**
-```json
-[{ "from": "insight:{slug}", "to": "task:{slug}", "relationType": "about" }]
-```
-```json
-[{ "from": "insight:{slug}", "to": "project:{slug}", "relationType": "about" }]
-```
-
-Skip all graph writes silently if `read_graph` was unavailable. Don't report graph operations to the user unless an error occurs.
+Skip file writes only if nothing meaningful was confirmed. Don't report file/graph operations to the user unless an error occurs — confirm the session briefly.
 
 ## Graph Schema Reference
 
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
-| Task | `task:{kebab-slug}` | `priority: 1\|2\|3...`, `status: pending\|in_progress\|done\|blocked`, `note: {text}` |
+| Task | `task:{kebab-slug}` | **one** `priority: 1\|2\|3...`, **one** `status: pending\|in_progress\|done\|blocked`, optional `ref: {path}` |
 | Project | `project:{kebab-slug}` | — |
-| Insight | `insight:{kebab-slug}` | `date: YYYY-MM-DD`, `pattern: {text}`, `source: introspect` |
 
 | Relation | Meaning |
 |----------|---------|
 | `task → belongs_to → project` | Task belongs to a project |
 | `task → blocks → task` | One task is blocking another |
-| `insight → about → task` | Insight is about a specific task |
-| `insight → about → project` | Insight is about a specific project |
+
+Insights live in `{JOURNAL_PATH}/insights/*.md`, not in the graph.

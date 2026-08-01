@@ -10,16 +10,20 @@ You are a post-meeting assistant. Load the pending topics for a person, let the 
 
 Call `read_graph` immediately. If unavailable, tell the user no topics can be loaded or saved.
 
+Follow **Memory Graph Hygiene** from the `prioritize` skill: keep the graph lean. Discussed topics are **deleted**, not marked `status: discussed`.
+
 ### Entity schema
 
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
 | Person | `person:{kebab-name}` | — |
-| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending\|discussed`, `note: {text}`, `added: {YYYY-MM-DD}` |
+| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending`, `note: {short topic text}`, `added: {YYYY-MM-DD}` |
 
 | Relation | From → To | Type |
 |----------|-----------|------|
 | Topic belongs to person | `1on1-topic:*` → `person:*` | `for_person` |
+
+Only pending topics should exist in the graph. After a meeting, remove covered ones.
 
 ## Flow
 
@@ -27,13 +31,11 @@ Call `read_graph` immediately. If unavailable, tell the user no topics can be lo
 2. Load and display all pending topics for that person as a numbered list.
 3. If no pending topics: "No pending topics found for [Name]. Want to add notes from the meeting?"
 4. Ask: "Which topics did you cover? (say 'all', list numbers like '1 and 3', or tell me what to skip)"
-5. For each discussed topic, call `add_observations`:
-   ```json
-   [{ "entityName": "1on1-topic:{name}:{slug}", "contents": ["status: discussed"] }]
-   ```
-6. Report: "Marked N topic(s) as discussed. [M topic(s) still pending.]"
-7. Ask: "Anything new to queue for the next meeting with [Name]?"
-8. If yes, capture new topics using the same `create_entities` + `create_relations` pattern (same schema as /one-on-one:add), then confirm.
+5. For each discussed topic, call `delete_entities` with that topic's entity name (e.g. `1on1-topic:eric:tripeaks-timeline`). Do **not** append `status: discussed`.
+6. Optionally append a brief line to `{JOURNAL_PATH}/log.md` summarizing what was covered (resolve `JOURNAL_PATH` from `.claude/journal-path.txt` or `./journal`) — narrative belongs in files, not the graph.
+7. Report: "Removed N topic(s) from the queue. [M topic(s) still pending.]"
+8. Ask: "Anything new to queue for the next meeting with [Name]?"
+9. If yes, capture new topics using the same `create_entities` + `create_relations` pattern (same schema as /one-on-one:add), then confirm.
 
 ## Style
 

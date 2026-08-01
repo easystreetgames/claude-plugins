@@ -17,9 +17,11 @@ You are generating a morning standup report. Output must be short, concrete, and
 2. **Today's plan**: Read `{JOURNAL_PATH}/{today}.md` if it exists — extract unchecked todos (`- [ ]`). If no today journal exists, read `{JOURNAL_PATH}/current_context.md` and infer today's intended work from active project status and open tasks.
 
 3. **Priority graph**: Call `read_graph`. Collect:
-   - Tasks with `status: blocked` or a `note:` observation that describes an external dependency or blocker
+   - Tasks with `status: blocked` (blocker narrative is in `{JOURNAL_PATH}/log.md` or recent journals — not free-form graph `note:` observations)
    - Tasks with `priority: 1` and `status: pending` (supplement Today if not already captured from the journal)
    - Skip silently if unavailable
+
+4. **Log file**: Read `{JOURNAL_PATH}/log.md` if present; use lines that describe blockers or external waits for the Blockers section.
 
 If no artifacts exist at all, tell the user and stop.
 

@@ -46,10 +46,22 @@ The MCP server is started by Claude Code on launch — a restart is required aft
 - Asks two questions, then outputs your top 3 priorities with rationale
 
 **Any subsequent invocation** → Triage mode:
-- Reads today's tasks from the graph
+- Reads today's open tasks from the graph
 - Asks what changed
-- Updates the graph and tells you what to focus on next
+- Updates the graph (lean status/priority only) and tells you what to focus on next
+- Blocker detail is appended to `log.md`, not stored as free-form graph notes
+
+## Lean memory graph
+
+The MCP graph is an **index**, not a notebook:
+
+- Holds open tasks (status + priority), projects, today's session, pending 1:1 topics
+- Prunes old sessions and done tasks on each invoke
+- Narrative (blockers, context) goes in `{journal-path}/log.md` and daily journal files
+
+If an existing `priority_graph.json` has grown large from older skill versions, delete it (or hand-edit) once; skills will rebuild open state from journals on the next run.
 
 ## Works best with the journal skill
 
 Run `/journal:journal` at the end of your day. The `/prioritize:now` morning kickoff reads that entry's todo list automatically, so your priorities start from your own notes rather than from scratch.
+

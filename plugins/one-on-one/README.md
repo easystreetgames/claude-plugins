@@ -14,15 +14,15 @@ Manage running topic lists for your one-on-one meetings. Capture things to discu
 | --------------------- | ---------------------------------------- |
 | `/one-on-one:add`     | Capture a topic to discuss with someone  |
 | `/one-on-one:review`  | Pull up your agenda before a meeting     |
-| `/one-on-one:debrief` | Mark topics as discussed after a meeting |
+| `/one-on-one:debrief` | Remove covered topics after a meeting |
 
 ## Storage
 
-Topics are persisted in the MCP memory graph (same graph used by `journal` and `prioritize`). If MCP is unavailable, topics are shown in-session only.
+Pending topics are stored in the MCP memory graph (same lean graph used by `journal` and `prioritize`). Discussed topics are **deleted** from the graph on debrief — not kept as archived entries. Optional meeting notes can go to `log.md`. If MCP is unavailable, topics are shown in-session only.
 
 ## Entity schema
 
 | Entity | Pattern                    |
 | ------ | -------------------------- |
 | Person | `person:{name}`            |
-| Topic  | `1on1-topic:{name}:{slug}` |
+| Topic  | `1on1-topic:{name}:{slug}` (pending only) |

@@ -15,7 +15,9 @@ Call `read_graph` immediately. If unavailable, tell the user no topics can be lo
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
 | Person | `person:{kebab-name}` | — |
-| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending\|discussed`, `note: {text}`, `added: {YYYY-MM-DD}` |
+| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending`, `note: {short topic text}`, `added: {YYYY-MM-DD}` |
+
+Only pending topics should exist in the graph (discussed topics are deleted in debrief, not kept as `status: discussed`).
 
 Filter for `status: pending` only.
 

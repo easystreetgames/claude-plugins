@@ -15,11 +15,13 @@ Call `read_graph` once at the start. If unavailable, warn the user and continue 
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
 | Person | `person:{kebab-name}` | `role: {text}` (optional) |
-| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending`, `note: {text}`, `added: {YYYY-MM-DD}` |
+| Topic | `1on1-topic:{person-kebab}:{slug}` | `status: pending`, `note: {short topic text}`, `added: {YYYY-MM-DD}` |
 
 | Relation | From → To | Type |
 |----------|-----------|------|
 | Topic belongs to person | `1on1-topic:*` → `person:*` | `for_person` |
+
+Keep topics lean: one short `note:` with the capture text is fine (topics are deleted after debrief). Do not add free-form narrative beyond the topic string.
 
 Name conventions:
 - Person: first name lowercase — `eric`, `jack`, `jeremy`

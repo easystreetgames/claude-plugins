@@ -40,7 +40,7 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
    - Use web search to find relevant tech news that relates to the user's activities
    - Upon approval, write a **consolidated** journal file for today (see File Management)
    - Update `{JOURNAL_PATH}/current_context.md`
-   - Sync the todo list and projects to the MCP memory graph (if available)
+   - Sync open todos/projects to the MCP memory graph and prune closed tasks (if available)
 
 2. **Log File**:
    - Read `{JOURNAL_PATH}/log.md` if it exists — weave logged entries naturally into the conversation as known activities
@@ -109,13 +109,11 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
 
 After writing the journal file and `current_context.md`, attempt to sync with the MCP memory graph. Skip all steps silently if `read_graph` is unavailable.
 
-The graph is designed to reflect only **current, active tasks** — it should not accumulate over time.
-
-Use the same entity schema as the `prioritize` skill:
+Follow **Memory Graph Hygiene** from the `prioritize` skill: the graph is a lean index (identity + latest status/priority + relations + optional `ref:`). Do not write free-form `note:` observations. Narrative stays in journal files and `log.md`.
 
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
-| Task | `task:{kebab-slug}` | `status: pending`, `note: {text}` |
+| Task | `task:{kebab-slug}` | **one** `status: pending\|in_progress\|blocked` (no `done` kept long-term) |
 | Project | `project:{kebab-slug}` | — |
 
 | Relation | Meaning |
@@ -124,15 +122,16 @@ Use the same entity schema as the `prioritize` skill:
 
 ### Steps
 
-**1. Remove tasks no longer in the todo list**
+**1. Prune closed / dropped tasks**
 
-Call `read_graph`. For each existing `task:*` entity with `status: pending`, check whether it appears in today's new todo list. If it does not appear, call `delete_entities` to remove it:
-```json
-["task:{slug}"]
-```
-This keeps the graph lean — only current, active tasks remain.
+Call `read_graph`. Build the set of kebab-slugs for every unchecked todo (`- [ ]`) in today's journal entry.
 
-**2. Seed new tasks from the approved todo list**
+For each existing `task:*` entity:
+
+- If its slug is **not** in today's open todo list → call `delete_entities` for that task (do **not** append `status: done`).
+- If its latest `status:` is `done` → call `delete_entities` for that task.
+
+**2. Seed new / refresh open tasks from the approved todo list**
 
 For each unchecked todo item (`- [ ]`) in the final journal entry:
 
@@ -141,14 +140,15 @@ a. Generate a short kebab-slug from the task text. Examples:
    - "Collaborate with Eric on TriPeaks this week" → `eric-tripeaks-collab`
    - "Monitor Solitaire FTUE funnel analytics" → `solitaire-ftue-analytics`
 
-b. Call `create_entities` (duplicate entities are safe — the server ignores them):
+b. If the entity does not exist, call `create_entities`:
    ```json
    [{ "name": "task:{slug}", "entityType": "task", "observations": ["status: pending"] }]
    ```
+   If it already exists with a different status, use replace-don't-append: `delete_observations` for existing `status:*` strings, then `add_observations` with `status: pending` (unless it is already correctly `in_progress` or `blocked` — leave those alone).
 
 **3. Ensure project entities exist and link tasks**
 
-For each task, identify the most relevant project from the journal content. Common mappings:
+For each open task, identify the most relevant project from the journal content. Common mappings:
 
 - Solitaire, Yahoo, Stratum, rapid prototyping, TriPeaks → `project:yahoo`
 - Intusic, Jeremy, Kim, game kit → `project:intusic`

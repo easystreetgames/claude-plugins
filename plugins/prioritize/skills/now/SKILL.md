@@ -26,17 +26,64 @@ This skill requires the `@modelcontextprotocol/server-memory` MCP server. Create
 
 ---
 
+## Memory Graph Hygiene (canonical)
+
+The graph is a **lean index** — identity, latest status/priority, relations, optional file refs. Narrative lives in journal files (`YYYY-MM-DD.md`, `log.md`, `current_context.md`, `insights/`). All graph-writing skills follow these rules:
+
+1. **Replace, don't append** — Before writing a new `status:` or `priority:`, call `delete_observations` for any existing observations on that entity that start with the same key (`status:`, `priority:`). Then `add_observations` with the new value. Never leave multiple statuses/priorities on one entity.
+
+2. **No free-form notes in the graph** — Do not write `note: {paragraph}`. Instead:
+   - Mid-session / triage detail → append a line to `{JOURNAL_PATH}/log.md` (format: `[YYYY-MM-DD HH:MM] {text}`).
+   - Standing context → `current_context.md` or the daily journal, not the graph.
+   - If a pointer is needed: one observation `ref: YYYY-MM-DD.md` or `ref: log.md` (relative to `JOURNAL_PATH`).
+
+3. **Prune closed entities** — Use `delete_entities` (relations go away with the entity):
+   - **Tasks** whose latest `status: done` is not from today's work → delete on morning kickoff (and journal MCP sync).
+   - **Sessions** `session:*` where date &lt; today → delete on every invoke.
+   - **1:1 topics** marked discussed → delete immediately in debrief (do not keep `status: discussed`).
+   - **Insights** → files under `{JOURNAL_PATH}/insights/`, not heavy graph observations.
+
+4. **Open set only** — After hygiene, the graph should mostly hold open work: pending/in_progress/blocked tasks, active projects, pending 1:1 topics, today's session.
+
+**Helper — set status or priority (use every time):**
+
+```
+1. From read_graph / known state, collect existing observations on the entity that start with "status:" or "priority:" (whichever key you are updating).
+2. If any exist, call delete_observations with those exact observation strings.
+3. Call add_observations with the new value only.
+```
+
+**Helper — log narrative (use instead of note:):**
+
+Append to `{JOURNAL_PATH}/log.md`:
+```
+[YYYY-MM-DD HH:MM] {concise detail}
+```
+
+---
+
 ## On Every Invocation
 
 **Step 1 — Verify MCP availability**
 
-Call `read_graph`. If the call fails or the tool is not available, display the full Setup section above verbatim, then offer to continue in **no-graph mode**: run the same Morning Kickoff or Triage conversation without persisting anything to the graph. Skip all `create_entities`, `create_relations`, and `add_observations` calls in no-graph mode, and tell the user their priorities won't be remembered across sessions until setup is complete.
+Call `read_graph`. If the call fails or the tool is not available, display the full Setup section above verbatim, then offer to continue in **no-graph mode**: run the same Morning Kickoff or Triage conversation without persisting anything to the graph. Skip all graph write/prune calls in no-graph mode, and tell the user their priorities won't be remembered across sessions until setup is complete.
 
-**Step 2 — Get today's date**
+**Step 2 — Get today's date and journal path**
 
 Determine today's date in `YYYY-MM-DD` format.
 
-**Step 3 — Detect mode**
+**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
+
+**Step 3 — Prune (skip in no-graph mode)**
+
+From the graph just read:
+
+1. Call `delete_entities` for every `session:*` entity whose date is before today.
+2. Call `delete_entities` for every `task:*` whose **latest** `status:` observation is `done` (stale closed work — do not keep done tasks across days).
+
+Do not narrate prune steps to the user.
+
+**Step 4 — Detect mode**
 
 Call `search_nodes` with the query `session:{today}` (e.g. `session:2026-07-04`).
 
@@ -53,11 +100,10 @@ You are helping the user start their workday with clarity and a concrete priorit
 
 ### 1. Load context
 
-**Journal Path**: Read `.claude/journal-path.txt` in the current working directory. If found, use that path as `JOURNAL_PATH`; otherwise use `./journal`.
-
 - Attempt to read `{JOURNAL_PATH}/{today}.md`. If it exists, extract every unchecked item (`- [ ]`) from the Todo section — match any heading level and capitalization (`## Todo`, `### Todo`, `## TODO`, etc.).
 - Attempt to read `{JOURNAL_PATH}/current_context.md` for standing project and people context.
-- If neither file exists, proceed with an empty task list and rely entirely on conversation.
+- Attempt to read `{JOURNAL_PATH}/log.md` for mid-day notes not yet journaled.
+- If neither journal nor context exists, proceed with an empty task list and rely entirely on conversation.
 
 ### 2. Initialize the session
 
@@ -91,10 +137,15 @@ Ask one question at a time. Wait for the full response before asking the next.
 1. *"What's the most important thing you need to finish today?"*
 2. *"Anything new, blocking, or competing for your attention?"*
 
-Based on what the user shares, create or update task entities. Assign `priority: 1`, `priority: 2`, `priority: 3` observations to the tasks that matter most. Add `note: {context}` observations for blockers or dependencies the user mentions. Add `blocks` relations where one task explicitly holds up another:
+Based on what the user shares:
+
+- Create or update task entities (lean observations only).
+- Set `priority: 1`, `priority: 2`, `priority: 3` using the **replace, don't append** helper.
+- For blockers or dependencies: append detail to `{JOURNAL_PATH}/log.md`; set `status: blocked` via the replace helper when a task is blocked; add `blocks` relations where one task explicitly holds up another:
 ```json
 [{ "from": "task:{blocker-slug}", "to": "task:{blocked-slug}", "relationType": "blocks" }]
 ```
+- Optionally set `ref: log.md` on a blocked task if a pointer helps; never write free-form `note:` observations.
 
 ### 5. Output: Today's Top 3
 
@@ -118,7 +169,7 @@ You are helping the user re-orient after something changed mid-day.
 
 ### 1. Load current state
 
-Call `read_graph`. Identify all task entities. Note which have `status: done`, `status: in_progress`, `status: blocked`, or `status: pending`. Note any `blocks` relations between tasks.
+Call `read_graph` (after prune). Identify open task entities. Note which have `status: in_progress`, `status: blocked`, or `status: pending`. Note any `blocks` relations. Read `{JOURNAL_PATH}/log.md` if present for recent narrative.
 
 ### 2. Converse
 
@@ -131,19 +182,14 @@ Ask one question at a time. Wait for the full response before asking the next.
 
 Based on what the user tells you:
 
-- **Task finished:** call `add_observations`:
-  ```json
-  [{ "entityName": "task:{slug}", "contents": ["status: done"] }]
-  ```
-- **New task:** call `create_entities` with `status: pending` observation, then `create_relations` for project link (same pattern as Morning Kickoff step 3)
-- **Blocker:** call `add_observations` with `note: {blocker description}` in `contents`, and `create_relations` with `relationType: blocks` if one task is holding up another:
-  ```json
-  [{ "entityName": "task:{slug}", "contents": ["note: {blocker description}"] }]
-  ```
-- **Reprioritize:** call `add_observations` to update `priority` values on affected tasks:
+- **Task finished:** Prefer `delete_entities` for `task:{slug}` (remove finished work from the graph). If you need to keep it visible only for the rest of today, set `status: done` via the replace helper — morning prune will remove it tomorrow.
+- **New task:** call `create_entities` with `status: pending` observation, then `create_relations` for project link (same pattern as Morning Kickoff step 3).
+- **Blocker:** append `[YYYY-MM-DD HH:MM] {blocker description}` to `{JOURNAL_PATH}/log.md`. Set `status: blocked` via the replace helper. Add `blocks` relations if one task holds up another. Optionally `ref: log.md`. Never write `note:`.
+- **Reprioritize:** set `priority:` via the replace helper:
   ```json
   [{ "entityName": "task:{slug}", "contents": ["priority: 1"] }]
   ```
+  (after deleting any prior `priority:*` observations)
 
 ### 4. Output: What to focus on next
 
@@ -164,10 +210,12 @@ Pick the highest-priority non-done, non-blocked task given what just changed. Pr
 | Entity | Name pattern | Observations |
 |--------|-------------|--------------|
 | Session | `session:YYYY-MM-DD` | `started: {timestamp}` |
-| Task | `task:{kebab-slug}` | `priority: 1\|2\|3...`, `status: pending\|in_progress\|done\|blocked`, `note: {text}` |
+| Task | `task:{kebab-slug}` | **one** `priority: 1\|2\|3...`, **one** `status: pending\|in_progress\|done\|blocked`, optional `ref: {path}` |
 | Project | `project:{kebab-slug}` | — |
 
 | Relation | Meaning |
 |----------|---------|
 | `task → belongs_to → project` | Task belongs to a project |
 | `task → blocks → task` | One task is blocking another |
+
+Do **not** store free-form `note:` observations. Detail goes in `{JOURNAL_PATH}/log.md` or journal files.

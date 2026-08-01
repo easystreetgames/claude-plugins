@@ -23,11 +23,15 @@ Gather everything before speaking:
 
 2. **Existing context file**: Read `{JOURNAL_PATH}/current_context.md`. Treat this as a starting point — it may be stale but it's the best baseline you have.
 
-3. **Priority graph**: Call `read_graph`. Collect all `task:*` and `project:*` entities with their `status`, `priority`, and `note` observations. Note which tasks are done vs. still open. Skip silently if unavailable.
+3. **Priority graph**: Call `read_graph`. Collect all `task:*` and `project:*` entities with their latest `status`, `priority`, and optional `ref:` observations. Note which tasks are still open (pending/in_progress/blocked). Do not rely on free-form graph `note:` text — detail lives in journals and `log.md`. Skip silently if unavailable.
 
-4. **Usability reports**: Look for files matching `{JOURNAL_PATH}/usability-report-*.md` and `{JOURNAL_PATH}/usability-*.md`. For any found, note the subject, date, and any severity-3 or severity-4 findings that haven't been resolved.
+4. **Log file**: Read `{JOURNAL_PATH}/log.md` if present for recent blockers or mid-session notes.
 
-5. **Research notes**: Look for files in `{JOURNAL_PATH}/research/` and matching `{JOURNAL_PATH}/research-*.md`. For any found within the last 30 days, note the topic and whether it produced a concrete recommendation.
+5. **Usability reports**: Look for files matching `{JOURNAL_PATH}/usability-report-*.md` and `{JOURNAL_PATH}/usability-*.md`. For any found, note the subject, date, and any severity-3 or severity-4 findings that haven't been resolved.
+
+6. **Research notes**: Look for files in `{JOURNAL_PATH}/research/` and matching `{JOURNAL_PATH}/research-*.md`. For any found within the last 30 days, note the topic and whether it produced a concrete recommendation.
+
+7. **Insights** (optional): Skim `{JOURNAL_PATH}/insights/*.md` from the last 30 days for patterns that should appear under open threads.
 
 If no artifacts at all exist, tell the user and stop — there is nothing to synthesize.
 

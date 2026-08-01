@@ -16,14 +16,16 @@ A reflective conversation partner that loads your journal history and priority g
 
 ## What it does
 
-On invoke, it silently reads the last 14 days of journal entries and your MCP memory graph, then opens with the most interesting pattern it finds — a stalled task, a priority mismatch, a recurring blocker, or a dropped thread.
+On invoke, it silently reads the last 14 days of journal entries, `log.md`, prior files under `insights/`, and your lean MCP memory graph, then opens with the most interesting pattern it finds — a stalled task, a priority mismatch, a recurring blocker, or a dropped thread.
 
-It asks one question at a time and follows the conversation wherever you take it. When you end the session, it writes any confirmed insights and task updates back to the memory graph.
+It asks one question at a time and follows the conversation wherever you take it. When you end the session, it writes confirmed insights to `{journal-path}/insights/YYYY-MM-DD-{slug}.md` and applies lean task updates to the graph (status/priority only; narrative goes to `log.md`).
 
 ## Dependencies
 
-- **Journal files**: `~/Downloads/Journal/YYYY-MM-DD.md` — reads the last 14 days
-- **MCP memory graph**: reads tasks, projects, and prior insights; writes updates as the conversation unfolds. Falls back to journal-only if the graph is unavailable.
+- **Journal files**: `YYYY-MM-DD.md` — reads the last 14 days
+- **`log.md`**: mid-session notes and blocker detail
+- **`insights/`**: prior reflection notes (file-based, not stored as heavy graph entities)
+- **MCP memory graph**: lean index of open tasks and projects. Falls back to journal-only if the graph is unavailable.
 
 ## Works well with
 
