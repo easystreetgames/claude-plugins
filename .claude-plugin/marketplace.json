@@ -1,5 +1,6 @@
 {
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "version": "1.0.0",
   "name": "esgames-plugins",
   "owner": {
     "name": "rob",
@@ -46,6 +47,11 @@
       "name": "standup",
       "source": "./plugins/standup",
       "description": "Generates a concise morning standup report (Yesterday / Today / Blockers) from your journal entries and priority graph."
+    },
+    {
+      "name": "spirograph",
+      "source": "./plugins/spirograph",
+      "description": "Design and generate ESG spirograph animation scripts — interview-driven script generation using gear mechanics, color palettes, and pattern ratios."
     }
   ]
 }

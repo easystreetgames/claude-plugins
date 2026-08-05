@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "spirograph",
+  "description": "Design and generate ESG spirograph animation scripts — interview-driven script generation using gear mechanics, color palettes, and pattern ratios.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}
