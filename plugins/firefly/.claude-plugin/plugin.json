@@ -1,0 +1,7 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "firefly",
+  "description": "Generate optimized Adobe Firefly image prompts — interview-driven prompt builder covering subject, style, lighting, composition, and mood.",
+  "version": "1.0.0",
+  "skills": "./skills"
+}

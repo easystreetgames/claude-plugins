@@ -52,6 +52,11 @@
       "name": "spirograph",
       "source": "./plugins/spirograph",
       "description": "Design and generate ESG spirograph animation scripts — interview-driven script generation using gear mechanics, color palettes, and pattern ratios."
+    },
+    {
+      "name": "firefly",
+      "source": "./plugins/firefly",
+      "description": "Generate optimized Adobe Firefly image prompts — interview-driven prompt builder covering subject, style, lighting, composition, and mood."
     }
   ]
 }
