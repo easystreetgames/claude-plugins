@@ -62,7 +62,13 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
    - Include specific details mentioned by the user
    - Maintain a consistent format across entries
    - Include a "Tech Context" section with relevant industry news and links
-   - Include a "Todo" section with current tasks
+   - Include a "Todo" section as a simple kanban outline — no ranking, no deadlines. The user pulls work by personal energy and bandwidth, so never order items by priority. Use these `###` subheadings (omit any that are empty), with each item as an unchecked `- [ ]` line:
+     - **In Progress** — actively being worked
+     - **Ready** — unblocked, can be pulled anytime
+     - **Waiting On** — blocked on someone or something else; name who/what (e.g. "— waiting on Jeremy")
+     - **Someday** — no near-term intent, carried cheaply
+     - Items finished since the last entry may appear once as `- [x]` under a **Done** subheading, then drop off in the next entry.
+     - Carry items forward from the previous entry's Todo section, moving them between headings as their state changes.
 
 5. **File Management**:
    - Store entries in `{JOURNAL_PATH}` directory
@@ -97,7 +103,7 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
 7. Follow up with relevant questions; continue until the user says **"that's all"** — you MUST NOT proceed to step 8 before this phrase
 8. *(Only after "that's all")* Create and present a consolidated structured summary
 9. Search for relevant tech news related to the user's activities
-10. Add a "Tech Context" section and a "Todo" section to the summary
+10. Add a "Tech Context" section and a kanban-style "Todo" section (In Progress / Ready / Waiting On / Someday) to the summary
 11. Ask for confirmation or revisions
 12. Rewrite `{JOURNAL_PATH}/{today}.md` as a complete, consolidated entry (all sessions merged)
 13. Update `{JOURNAL_PATH}/current_context.md`
@@ -142,9 +148,11 @@ a. Generate a short kebab-slug from the task text. Examples:
 
 b. If the entity does not exist, call `create_entities`:
    ```json
-   [{ "name": "task:{slug}", "entityType": "task", "observations": ["status: pending"] }]
+   [{ "name": "task:{slug}", "entityType": "task", "observations": ["status: {derived-status}"] }]
    ```
-   If it already exists with a different status, use replace-don't-append: `delete_observations` for existing `status:*` strings, then `add_observations` with `status: pending` (unless it is already correctly `in_progress` or `blocked` — leave those alone).
+   Derive the status from the item's Todo subheading: **In Progress** → `in_progress`, **Waiting On** → `blocked`, **Ready** / **Someday** → `pending`. Do not write `priority:` observations — the kanban outline is intentionally unranked.
+
+   If the entity already exists with a different status, use replace-don't-append: `delete_observations` for existing `status:*` strings, then `add_observations` with the derived status.
 
 **3. Ensure project entities exist and link tasks**
 
