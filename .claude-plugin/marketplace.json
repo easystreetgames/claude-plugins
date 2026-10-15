@@ -57,6 +57,11 @@
       "name": "firefly",
       "source": "./plugins/firefly",
       "description": "Generate optimized Adobe Firefly image prompts — interview-driven prompt builder covering subject, style, lighting, composition, and mood."
+    },
+    {
+      "name": "ideate",
+      "source": "./plugins/ideate",
+      "description": "Brainstorm ideas on a topic with subagents, have three diverse topic-specific personas score them, and present the list ranked by normalized score."
     }
   ]
 }
