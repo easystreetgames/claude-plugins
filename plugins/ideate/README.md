@@ -21,7 +21,8 @@ Claude will:
 1. Generate ~12 ideas and design 3 diverse personas for the topic (parallel subagents)
 2. Have each persona score every idea 1–10 with a one-line reason (parallel subagents, blind to each other)
 3. Normalize each persona's scores to 0–10 so harsh and generous graders count equally, then average them
-4. Present the ideas in score order with per-persona columns, notes on the top 3, and the most divisive idea
+4. Save the full reviews (personas, ideas, every persona's raw score, normalized score, and reason for every idea) to `ideate/YYYY-MM-DD-<topic-slug>.md` in the current directory
+5. Present the ideas in score order with per-persona columns (raw → normalized), notes on the top 3, the most divisive idea, and the path to the reviews file
 
 ## Why normalize?
 

@@ -7,7 +7,7 @@ description: Use when asked to brainstorm, generate ideas, or get a ranked idea 
 
 ## Overview
 
-Topic in, ranked idea list out. Every phase runs in a subagent; the main context only coordinates, normalizes scores, and presents results.
+Topic in, ranked idea list out. Every phase runs in a subagent; the main context only coordinates, normalizes scores, saves the full reviews to a local Markdown file, and presents results.
 
 **Topic**: `$ARGUMENTS`. If empty, ask the user for a topic (and optionally how many ideas — default 12) before doing anything else.
 
@@ -54,20 +54,64 @@ Raw scores aren't comparable across personas — one may grade harshly, another 
 
 ---
 
-**Phase 4 — Present**
+**Phase 4 — Write the full reviews file (main context)**
+
+Before presenting, save every review to a local Markdown file so the ranking can be audited later. Path: `ideate/YYYY-MM-DD-<topic-slug>.md` under the current working directory (create the folder if needed; if the file exists, append `-2`, `-3`, …). Use this structure:
+
+```markdown
+# Ideate: <topic>
+
+Date: YYYY-MM-DD
+
+## Personas
+
+### 1. <Name> — <role>
+- **Cares about:** <values>
+- **Rejects:** <dealbreaker>
+
+(repeat for all 3)
+
+## Ideas
+
+1. **Title** — description
+(full numbered list, original numbers)
+
+## Reviews
+
+### <Persona 1 name>
+
+Raw range: <min>–<max>
+
+| # | Idea | Raw | Norm | Reason |
+|---|------|-----|------|--------|
+| 1 | Title | 7 | 6.7 | <their reason, verbatim> |
+
+(one table per persona, every idea, in idea-number order)
+
+## Final ranking
+
+(the same ranked table shown in Phase 5)
+```
+
+Reasons are copied verbatim from the reviewer output — don't paraphrase or trim them.
+
+---
+
+**Phase 5 — Present**
 
 Show the personas first (one line each: name — role — what they care about), then the ranked table:
 
 ```markdown
 | Rank | Idea | Score | <Persona 1> | <Persona 2> | <Persona 3> |
 |------|------|-------|-------------|-------------|-------------|
-| 1 | **Title** — description | 8.7 | 9.0 | 10.0 | 7.1 |
+| 1 | **Title** — description | 8.7 | 8 → 9.0 | 10 → 10.0 | 6 → 7.1 |
 ```
 
-Persona columns show normalized scores. After the table, add:
+Persona columns are **required** — never collapse the output to the final score alone. Each cell shows the persona's raw score → normalized score. After the table, add:
 
 - **Top pick notes** — for the top 3 ideas, each persona's one-line reason.
 - **Most divisive** — the idea with the largest spread between its highest and lowest normalized score, with the two opposing reasons.
+- **Full reviews** — the path to the file from Phase 4, noting it has every persona's reason for every idea.
 
 Then ask whether they want to regenerate with a different angle, swap a persona, or expand on any idea.
 

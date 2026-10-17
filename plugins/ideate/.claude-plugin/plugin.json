@@ -2,6 +2,6 @@
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
   "name": "ideate",
   "description": "Brainstorm ideas on a topic with subagents, have three diverse topic-specific personas score them, and present the list ranked by normalized score.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "skills": "./skills"
 }
