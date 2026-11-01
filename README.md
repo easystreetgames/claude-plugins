@@ -20,7 +20,7 @@ Then invoke the skill:
 | Plugin | Skill | Description |
 | ------ | ----- | ----------- |
 | [journal](plugins/journal/) | `/journal:journal` | Conversational journaling assistant — interviews you about your day and saves a Markdown entry |
-| [prioritize](plugins/prioritize/) | `/prioritize:now` | Morning kickoff or mid-day triage — reads your journal todos and updates a priority graph |
+| [prioritize](plugins/prioritize/) | `/prioritize:now` | Pull work by energy — shows your Linear In Progress and Ready cards, unranked, and suggests ones that fit |
 | [introspection](plugins/introspection/) | `/introspection:introspect` | Reflective conversation partner — surfaces work patterns and stalled themes from your journal history and priority graph |
 | [research](plugins/research/) | `/research:research` | Iterative research — broad sweep then user-directed deep dives, each in a clean subagent |
 | [usability-report](plugins/usability-report/) | `/usability-report:nielsen-review` | Heuristic evaluation against Nielsen's 10 principles — outputs a severity-rated Markdown report |
@@ -34,13 +34,13 @@ The plugins are designed to compose. Here are the natural combinations.
 ### Daily work rhythm
 
 ```text
-/prioritize:now          ← morning: reads yesterday's journal todos, sets top 3 priorities
+/prioritize:now          ← any time: see your Linear board, pull a card that fits your energy
   ... do work ...
-/prioritize:now          ← mid-day: triage what changed, refocus
+/prioritize:now          ← when a card finishes or blocks: pull the next one
 /journal:journal         ← end of day: capture what happened + tomorrow's todos
 ```
 
-The journal's todo list becomes the next morning's kickoff input automatically.
+Tasks live in Linear; the journal records the day around them.
 
 ### Weekly reflection
 
@@ -55,7 +55,7 @@ Loads your full journal history and priority graph and surfaces recurring themes
 ```text
 /research:research       ← broad sweep on the topic, then deep dives on what matters
 /journal:journal         ← capture what you learned and any todos it generated
-/prioritize:now          ← triage the new work against existing priorities
+/prioritize:now          ← pull the new work when your energy fits it
 ```
 
 Use this when exploring an unfamiliar library, architectural approach, or domain before committing to an implementation path.
@@ -64,11 +64,11 @@ Use this when exploring an unfamiliar library, architectural approach, or domain
 
 ```text
 /usability-report:nielsen-review <url-or-path>   ← generates severity-rated findings
-/prioritize:now                                   ← triage severity 3–4 issues into your day
+/prioritize:now                                   ← pull a severity 3–4 fix once it's a Linear card
 /journal:journal                                  ← record what you fixed and what's still open
 ```
 
-The usability report gives you concrete severity scores; prioritize helps you decide which fires to fight today.
+The usability report gives you concrete severity scores; prioritize helps you pick which fix fits your energy.
 
 ### Recovering from context drift
 
@@ -88,7 +88,7 @@ All other skills read `current_context.txt` at startup. Running this brings them
 /research:research           ← explore the problem space
 /usability-report:...        ← evaluate the current state of the UI
 /journal:journal             ← capture findings and next steps
-/prioritize:now              ← set priorities from those todos
+/prioritize:now              ← pull the next card from Linear
 /introspection:introspect    ← zoom out after a few weeks to check direction
 ```
 

@@ -21,7 +21,7 @@
     {
       "name": "prioritize",
       "source": "./plugins/prioritize",
-      "description": "Work prioritizer using a local MCP memory graph. Runs morning kickoff or mid-day triage based on today's graph state."
+      "description": "Pull-by-energy work picker. Reads In Progress and Ready cards from Linear and suggests ones that match your current energy."
     },
     {
       "name": "introspection",
