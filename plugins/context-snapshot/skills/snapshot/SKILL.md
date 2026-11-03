@@ -56,6 +56,8 @@ From the loaded data, reconstruct the user's current picture:
 
 **Recency filter**: Remove details from the existing context file that haven't appeared in the last 14 days of journals and have no open Linear cards — they're likely stale.
 
+**Preserve `## Direction Docs`**: if the existing file has this section (a table of project → direction document paths, read by the `think` skill), carry it over unchanged at the end of the new file, except drop rows whose files no longer exist.
+
 ## Step 3 — Draft
 
 Write a new `current_context.md` using this exact format:
