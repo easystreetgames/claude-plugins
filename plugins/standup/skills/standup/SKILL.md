@@ -1,5 +1,5 @@
 ---
-description: Generate a concise morning standup report — Yesterday / Today / Blockers — pulled from your journal and priority graph. Team-facing, short, no fluff.
+description: Generate a concise morning standup report — Yesterday / Today / Blockers — pulled from your journal and Linear board. Team-facing, short, no fluff.
 ---
 
 # Standup Report
@@ -16,10 +16,17 @@ You are generating a morning standup report. Output must be short, concrete, and
 
 2. **Today's plan**: Read `{JOURNAL_PATH}/{today}.md` if it exists — extract unchecked todos (`- [ ]`). If no today journal exists, read `{JOURNAL_PATH}/current_context.md` and infer today's intended work from active project status and open tasks.
 
-3. **Priority graph**: Call `read_graph`. Collect:
-   - Tasks with `status: blocked` (blocker narrative is in `{JOURNAL_PATH}/log.md` or recent journals — not free-form graph `note:` observations)
-   - Tasks with `priority: 1` and `status: pending` (supplement Today if not already captured from the journal)
-   - Skip silently if unavailable
+3. **Linear board**: Linear is the only task source; do not read `task:*` entities from the MCP memory graph. Read-only: this skill never writes to Linear.
+
+   | Workspace | MCP server | Scope |
+   |-----------|-----------|-------|
+   | EasyStreetGames (EAS) | `linear-esg` | team **EasyStreetGames** |
+   | Intusic (INT) | `linear` | issues assigned to `me` |
+
+   Call `list_issues` on each source with `state: "started"` (In Progress) and `fields: ["title", "status", "priority", "project", "url"]`. For each In Progress card, call `get_issue` with `includeRelations: true`:
+   - A card with an open `blockedBy` (blocker not Done or Canceled) goes to Blockers, with the blocker named
+   - Other In Progress cards supplement Today if the journal doesn't already cover them
+   - Skip a source silently if its server isn't connected
 
 4. **Log file**: Read `{JOURNAL_PATH}/log.md` if present; use lines that describe blockers or external waits for the Blockers section.
 
@@ -29,7 +36,7 @@ If no artifacts exist at all, tell the user and stop.
 
 **Yesterday** — 2–5 bullets of what was actually done. Use action verbs: prepared, shipped, reviewed, met with, fixed, discussed, tested. Name the project or person when it adds clarity. Drop anything vague ("worked on X") — be specific about the outcome.
 
-**Today** — 2–4 bullets of what is planned. Draw from today's unchecked journal todos and priority-1 graph tasks. Focus on outcomes and deliverables, not busywork.
+**Today** — 2–4 bullets of what is planned. Draw from today's unchecked journal todos and In Progress Linear cards. Focus on outcomes and deliverables, not busywork.
 
 **Blockers** — 0–3 bullets of things stopped or waiting on something outside your control. If nothing is blocked, omit this section entirely — do not write "None".
 

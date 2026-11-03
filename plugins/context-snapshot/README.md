@@ -14,7 +14,7 @@ Rebuilds `current_context.md` — the standing context file read by `prioritize:
 | Artifact | Source |
 |----------|--------|
 | Recent journal entries | `{JOURNAL_PATH}/YYYY-MM-DD.md` (last 14 days) |
-| Priority graph | MCP memory server (`read_graph`) — lean open-task index |
+| Linear board | `linear-esg` (EAS) and `linear` (INT, assigned to you): In Progress, Ready, and done in the last 14 days. Read-only |
 | Log file | `{JOURNAL_PATH}/log.md` |
 | Insights | `{JOURNAL_PATH}/insights/*.md` |
 | Usability reports | `{JOURNAL_PATH}/usability-report-*.md` |
@@ -30,7 +30,7 @@ An updated `{JOURNAL_PATH}/current_context.md` with:
 - Active technical stacks
 - Any open UX or research threads shaping current work
 
-Stale entries — things not mentioned in the last 14 days and not open in the graph — are pruned automatically.
+Stale entries — things not mentioned in the last 14 days and not open in Linear — are pruned automatically.
 
 ## Usage
 
@@ -43,6 +43,6 @@ The skill shows a draft and a change summary before writing. You approve before 
 ## Setup
 
 No additional setup required. Optionally pairs with:
-- `prioritize` — shares the same MCP memory graph
+- `prioritize` — reads the same Linear board
 - `journal` — both read and write `current_context.md`
 - `introspection` — reads the same journal entries

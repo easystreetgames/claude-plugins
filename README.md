@@ -21,10 +21,10 @@ Then invoke the skill:
 | ------ | ----- | ----------- |
 | [journal](plugins/journal/) | `/journal:journal` | Conversational journaling assistant — interviews you about your day and saves a Markdown entry |
 | [prioritize](plugins/prioritize/) | `/prioritize:now` | Pull work by energy — shows your Linear In Progress and Ready cards, unranked, and suggests ones that fit |
-| [introspection](plugins/introspection/) | `/introspection:introspect` | Reflective conversation partner — surfaces work patterns and stalled themes from your journal history and priority graph |
+| [introspection](plugins/introspection/) | `/introspection:introspect` | Reflective conversation partner — surfaces work patterns and stalled themes from your journal history and Linear board |
 | [research](plugins/research/) | `/research:research` | Iterative research — broad sweep then user-directed deep dives, each in a clean subagent |
 | [usability-report](plugins/usability-report/) | `/usability-report:nielsen-review` | Heuristic evaluation against Nielsen's 10 principles — outputs a severity-rated Markdown report |
-| [context-snapshot](plugins/context-snapshot/) | `/context-snapshot:snapshot` | Rebuilds the standing context file from all artifacts — journal entries, priority graph, usability reports, and research notes |
+| [context-snapshot](plugins/context-snapshot/) | `/context-snapshot:snapshot` | Rebuilds the standing context file from all artifacts — journal entries, Linear board, usability reports, and research notes |
 | [one-on-one](plugins/one-on-one/) | `/one-on-one:add` `/one-on-one:review` `/one-on-one:debrief` | Running topic lists for 1:1 meetings — capture topics as they come up, pull an agenda before the meeting, mark items discussed after |
 
 ## Workflows
@@ -48,7 +48,7 @@ Tasks live in Linear; the journal records the day around them.
 /introspection:introspect
 ```
 
-Loads your full journal history and priority graph and surfaces recurring themes, stalled work, and patterns you might not notice day-to-day. Run it Friday afternoon or Monday morning when you want to zoom out.
+Loads your full journal history and Linear board and surfaces recurring themes, stalled work, and patterns you might not notice day-to-day. Run it Friday afternoon or Monday morning when you want to zoom out.
 
 ### Researching before you build
 
@@ -75,7 +75,7 @@ The usability report gives you concrete severity scores; prioritize helps you pi
 Run this after a break, after switching machines, or when `prioritize:now` or `journal:journal` seem to be working from stale information:
 
 ```text
-/context-snapshot:snapshot   ← reads last 14 days of journals, priority graph,
+/context-snapshot:snapshot   ← reads last 14 days of journals, Linear board,
                                 usability reports, and research notes — synthesizes
                                 a fresh current_context.txt for approval before writing
 ```

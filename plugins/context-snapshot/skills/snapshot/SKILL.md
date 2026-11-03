@@ -1,6 +1,6 @@
 ---
 name: snapshot
-description: Rebuild current_context.md from all available artifacts (journal entries, priority graph, usability reports, research notes). Use when context has drifted, after a break, or to sync the context file with recent work. Triggers on "context snapshot", "refresh context", "rebuild context", "update current_context", "my context is stale", or any request to regenerate the standing context file.
+description: Rebuild current_context.md from all available artifacts (journal entries, Linear board, usability reports, research notes). Use when context has drifted, after a break, or to sync the context file with recent work. Triggers on "context snapshot", "refresh context", "rebuild context", "update current_context", "my context is stale", or any request to regenerate the standing context file.
 ---
 
 # Context Snapshot
@@ -23,7 +23,14 @@ Gather everything before speaking:
 
 2. **Existing context file**: Read `{JOURNAL_PATH}/current_context.md`. Treat this as a starting point — it may be stale but it's the best baseline you have.
 
-3. **Priority graph**: Call `read_graph`. Collect all `task:*` and `project:*` entities with their latest `status`, `priority`, and optional `ref:` observations. Note which tasks are still open (pending/in_progress/blocked). Do not rely on free-form graph `note:` text — detail lives in journals and `log.md`. Skip silently if unavailable.
+3. **Linear board**: Linear is the only task source; do not read `task:*` or `project:*` entities from the MCP memory graph. Read-only: this skill never writes to Linear.
+
+   | Workspace | MCP server | Scope |
+   |-----------|-----------|-------|
+   | EasyStreetGames (EAS) | `linear-esg` | team **EasyStreetGames** |
+   | Intusic (INT) | `linear` | issues assigned to `me` |
+
+   Call `list_issues` on each source with `fields: ["title", "status", "statusType", "project", "updatedAt", "completedAt", "url"]`, once for In Progress (`state: "started"`), once for Ready (`state: "unstarted"`), and once for recently done (`completedAt: "-P14D"`). Group cards by their Linear `project`. Skip a source silently if its server isn't connected.
 
 4. **Log file**: Read `{JOURNAL_PATH}/log.md` if present for recent blockers or mid-session notes.
 
@@ -40,14 +47,14 @@ If no artifacts at all exist, tell the user and stop — there is nothing to syn
 From the loaded data, reconstruct the user's current picture:
 
 - **Active work**: What projects are actively in progress? What shipped? What's next?
-- **Stalled or blocked work**: Tasks that appear open in journals or the graph but haven't been touched recently
+- **Stalled or blocked work**: Work that is open in journals or Linear (In Progress or Ready) but hasn't been touched recently
 - **People**: Who is actively involved in each project right now? Omit people not mentioned in recent journals
 - **Open UX or research threads**: Active usability reports or research topics that are influencing current work
 - **Technical**: The tools and stacks currently in use across projects
 
-**Conflict resolution**: If the graph and journals disagree about a task's status, trust the most recent journal entry over the graph.
+**Conflict resolution**: If Linear and the journals disagree about a card's status, report Linear's status and note the journal's claim in one line; Linear is the task source.
 
-**Recency filter**: Remove details from the existing context file that haven't appeared in the last 14 days of journals and have no open graph entries — they're likely stale.
+**Recency filter**: Remove details from the existing context file that haven't appeared in the last 14 days of journals and have no open Linear cards — they're likely stale.
 
 ## Step 3 — Draft
 
