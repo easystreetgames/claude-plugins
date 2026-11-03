@@ -26,4 +26,4 @@ You manage the journal folder location for the current project. All other journa
 - All journal skills read `.claude/journal-path.txt` automatically before any file operations.
 - To change the path later: run `/journal:path <new-path>`.
 - The `.claude/` folder is the standard location for Claude Code project configuration.
-- If you use the `prioritize` skill's MCP memory server, update `MEMORY_FILE_PATH` in your MCP config to point to `{journal-path}/memory/priority_graph.json`.
+- If you use an MCP memory server (introspection, one-on-one), update `MEMORY_FILE_PATH` in your MCP config to point to `{journal-path}/memory/priority_graph.json`.

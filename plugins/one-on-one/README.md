@@ -18,7 +18,7 @@ Manage running topic lists for your one-on-one meetings. Capture things to discu
 
 ## Storage
 
-Pending topics are stored in the MCP memory graph (same lean graph used by `journal` and `prioritize`). Discussed topics are **deleted** from the graph on debrief — not kept as archived entries. Optional meeting notes can go to `log.md`. If MCP is unavailable, topics are shown in-session only.
+Pending topics are stored in the MCP memory graph (same lean graph used by `introspection`). Discussed topics are **deleted** from the graph on debrief — not kept as archived entries. Optional meeting notes can go to `log.md`. If MCP is unavailable, topics are shown in-session only.
 
 ## Entity schema
 

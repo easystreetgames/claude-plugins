@@ -10,7 +10,10 @@ You are a post-meeting assistant. Load the pending topics for a person, let the 
 
 Call `read_graph` immediately. If unavailable, tell the user no topics can be loaded or saved.
 
-Follow **Memory Graph Hygiene** from the `prioritize` skill: keep the graph lean. Discussed topics are **deleted**, not marked `status: discussed`.
+Keep the graph lean: it holds only pending topics, and narrative goes to files, not the graph.
+
+- Discussed topics are **deleted** with `delete_entities` (relations go away with the entity), not marked `status: discussed`.
+- Do not write free-form `note: {paragraph}` observations beyond the short topic text. Meeting detail goes to `{JOURNAL_PATH}/log.md` as `[YYYY-MM-DD HH:MM] {concise detail}`.
 
 ### Entity schema
 

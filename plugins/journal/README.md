@@ -20,12 +20,11 @@ Starts a journaling session. Claude will:
 3. Search for relevant tech news to include in a "Tech Context" section
 4. Write a structured entry (activities, tech context, todo list) to `{JOURNAL_PATH}/YYYY-MM-DD.md`
 5. Update `{JOURNAL_PATH}/current_context.md` for the next session
-6. Sync open todos to the lean MCP memory graph (prune closed tasks; no narrative notes in the graph)
-7. Clear the log file so entries aren't replayed
+6. Clear the log file so entries aren't replayed
 
 ### `/journal:log <note>`
 
-Appends a quick timestamped note to `{JOURNAL_PATH}/log.md` for pickup during the next journal session (and as narrative storage for prioritize/introspect blockers). Useful for capturing things mid-day without starting a full session.
+Appends a quick timestamped note to `{JOURNAL_PATH}/log.md` for pickup during the next journal session (and as narrative storage for introspect blockers). Useful for capturing things mid-day without starting a full session.
 
 ```
 /journal:log fixed the tangle game bug

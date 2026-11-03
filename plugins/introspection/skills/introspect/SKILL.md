@@ -26,7 +26,7 @@ Load context before speaking:
    - All `project:*` entities
    - Any `blocks` relations
 
-   Follow **Memory Graph Hygiene** from the `prioritize` skill: the graph is a lean index. Ignore legacy free-form `note:` / `insight:*` blobs if present; prefer files for narrative.
+   Follow **Memory Graph Hygiene** below: the graph is a lean index. Ignore legacy free-form `note:` / `insight:*` blobs if present; prefer files for narrative.
 
 If `read_graph` is unavailable, proceed with journal files only and skip all graph writes. If no journal files exist either, tell the user and offer a freeform conversation instead.
 
@@ -148,3 +148,28 @@ Skip file writes only if nothing meaningful was confirmed. Don't report file/gra
 | `task → blocks → task` | One task is blocking another |
 
 Insights live in `{JOURNAL_PATH}/insights/*.md`, not in the graph.
+
+## Memory Graph Hygiene
+
+The graph is a **lean index**: identity, latest status/priority, relations, optional file refs. Narrative lives in journal files (`YYYY-MM-DD.md`, `log.md`, `current_context.md`, `insights/`).
+
+1. **Replace, don't append** — Before writing a new `status:` or `priority:`, call `delete_observations` for any existing observations on that entity that start with the same key. Then `add_observations` with the new value. Never leave multiple statuses/priorities on one entity.
+
+2. **No free-form notes in the graph** — Do not write `note: {paragraph}`. Append detail to `{JOURNAL_PATH}/log.md` instead. If a pointer is needed, add one observation `ref: YYYY-MM-DD.md` or `ref: log.md` (relative to `JOURNAL_PATH`).
+
+3. **Prune closed entities** — Delete tasks whose latest `status:` is `done` with `delete_entities` (relations go away with the entity). Do not create `insight:*` entities; insights are files under `{JOURNAL_PATH}/insights/`.
+
+**Helper — set status or priority (use every time):**
+
+```
+1. From read_graph / known state, collect existing observations on the entity that start with "status:" or "priority:" (whichever key you are updating).
+2. If any exist, call delete_observations with those exact observation strings.
+3. Call add_observations with the new value only.
+```
+
+**Helper — log narrative (use instead of note:):**
+
+Append to `{JOURNAL_PATH}/log.md`:
+```
+[YYYY-MM-DD HH:MM] {concise detail}
+```

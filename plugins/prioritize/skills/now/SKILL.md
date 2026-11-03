@@ -81,38 +81,3 @@ Ask: *"Want to pull one?"* If the user picks a **Ready EAS card**, offer to set 
 
 If the user reports something mid-day (finished a card, hit a blocker, new work came in), tell them what to change in Linear in one line each. For EAS cards, offer to make the change; for INT, the user makes it.
 
----
-
-## Appendix: Memory Graph Hygiene (canonical)
-
-This skill no longer uses the graph. The rules stay here because `journal`, `introspection` and `one-on-one` follow them by name. The graph is a **lean index** — identity, latest status/priority, relations, optional file refs. Narrative lives in journal files (`YYYY-MM-DD.md`, `log.md`, `current_context.md`, `insights/`). All graph-writing skills follow these rules:
-
-1. **Replace, don't append** — Before writing a new `status:` or `priority:`, call `delete_observations` for any existing observations on that entity that start with the same key (`status:`, `priority:`). Then `add_observations` with the new value. Never leave multiple statuses/priorities on one entity.
-
-2. **No free-form notes in the graph** — Do not write `note: {paragraph}`. Instead:
-   - Mid-session / triage detail → append a line to `{JOURNAL_PATH}/log.md` (format: `[YYYY-MM-DD HH:MM] {text}`).
-   - Standing context → `current_context.md` or the daily journal, not the graph.
-   - If a pointer is needed: one observation `ref: YYYY-MM-DD.md` or `ref: log.md` (relative to `JOURNAL_PATH`).
-
-3. **Prune closed entities** — Use `delete_entities` (relations go away with the entity):
-   - **Tasks** whose latest `status: done` is not from today's work → delete on morning kickoff (and journal MCP sync).
-   - **Sessions** `session:*` where date &lt; today → delete on every invoke.
-   - **1:1 topics** marked discussed → delete immediately in debrief (do not keep `status: discussed`).
-   - **Insights** → files under `{JOURNAL_PATH}/insights/`, not heavy graph observations.
-
-4. **Open set only** — After hygiene, the graph should mostly hold open work: pending/in_progress/blocked tasks, active projects, pending 1:1 topics, today's session.
-
-**Helper — set status or priority (use every time):**
-
-```
-1. From read_graph / known state, collect existing observations on the entity that start with "status:" or "priority:" (whichever key you are updating).
-2. If any exist, call delete_observations with those exact observation strings.
-3. Call add_observations with the new value only.
-```
-
-**Helper — log narrative (use instead of note:):**
-
-Append to `{JOURNAL_PATH}/log.md`:
-```
-[YYYY-MM-DD HH:MM] {concise detail}
-```

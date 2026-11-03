@@ -22,9 +22,7 @@ Before any file operations, determine the journal folder:
 
 3. **Read `{JOURNAL_PATH}/current_context.md`** for standing project and task context.
 
-4. **Attempt to call `read_graph`** (MCP memory) for additional project/task context — skip silently if unavailable.
-
-5. **Read `{JOURNAL_PATH}/log.md`** if it exists — timestamped quick notes logged between sessions. Treat each line as a confirmed activity the user already did; weave them into the conversation as known facts, not questions.
+4. **Read `{JOURNAL_PATH}/log.md`** if it exists — timestamped quick notes logged between sessions. Treat each line as a confirmed activity the user already did; weave them into the conversation as known facts, not questions.
 
 ## Migration (offer once, then proceed)
 
@@ -40,7 +38,7 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
    - Use web search to find relevant tech news that relates to the user's activities
    - Upon approval, write a **consolidated** journal file for today (see File Management)
    - Update `{JOURNAL_PATH}/current_context.md`
-   - Sync open todos/projects to the MCP memory graph and prune closed tasks (if available)
+   - Do not write todos to the MCP memory graph — tasks live in Linear, and the Todo section stays in the journal file
 
 2. **Log File**:
    - Read `{JOURNAL_PATH}/log.md` if it exists — weave logged entries naturally into the conversation as known activities
@@ -97,82 +95,16 @@ After determining `JOURNAL_PATH`, silently check whether any `YYYY-MM-DD.txt` fi
 1. Note session start time (automatic — the model always knows the current time)
 2. Check if `{JOURNAL_PATH}/{today}.md` exists — if so, read it as prior-session context
 3. Read `{JOURNAL_PATH}/current_context.md`
-4. Call `read_graph` — skip silently if unavailable
-5. Read `{JOURNAL_PATH}/log.md` — surface logged entries as known activities
-6. Open with a context-appropriate question (fresh day vs. resuming mid-day)
-7. Follow up with relevant questions; continue until the user says **"that's all"** — you MUST NOT proceed to step 8 before this phrase
-8. *(Only after "that's all")* Create and present a consolidated structured summary
-9. Search for relevant tech news related to the user's activities
-10. Add a "Tech Context" section and a kanban-style "Todo" section (In Progress / Ready / Waiting On / Someday) to the summary
-11. Ask for confirmation or revisions
-12. Rewrite `{JOURNAL_PATH}/{today}.md` as a complete, consolidated entry (all sessions merged)
-13. Update `{JOURNAL_PATH}/current_context.md`
-14. Delete or empty `{JOURNAL_PATH}/log.md`
-15. Sync to MCP memory graph (see **MCP Graph Sync** below)
-16. Confirm successful storage
-
-## MCP Graph Sync
-
-After writing the journal file and `current_context.md`, attempt to sync with the MCP memory graph. Skip all steps silently if `read_graph` is unavailable.
-
-Follow **Memory Graph Hygiene** from the `prioritize` skill: the graph is a lean index (identity + latest status/priority + relations + optional `ref:`). Do not write free-form `note:` observations. Narrative stays in journal files and `log.md`.
-
-| Entity | Name pattern | Observations |
-|--------|-------------|--------------|
-| Task | `task:{kebab-slug}` | **one** `status: pending\|in_progress\|blocked` (no `done` kept long-term) |
-| Project | `project:{kebab-slug}` | — |
-
-| Relation | Meaning |
-|----------|---------|
-| `task → belongs_to → project` | Task belongs to a project |
-
-### Steps
-
-**1. Prune closed / dropped tasks**
-
-Call `read_graph`. Build the set of kebab-slugs for every unchecked todo (`- [ ]`) in today's journal entry.
-
-For each existing `task:*` entity:
-
-- If its slug is **not** in today's open todo list → call `delete_entities` for that task (do **not** append `status: done`).
-- If its latest `status:` is `done` → call `delete_entities` for that task.
-
-**2. Seed new / refresh open tasks from the approved todo list**
-
-For each unchecked todo item (`- [ ]`) in the final journal entry:
-
-a. Generate a short kebab-slug from the task text. Examples:
-   - "Test prioritize skill" → `test-prioritize-skill`
-   - "Collaborate with Eric on TriPeaks this week" → `eric-tripeaks-collab`
-   - "Monitor Solitaire FTUE funnel analytics" → `solitaire-ftue-analytics`
-
-b. If the entity does not exist, call `create_entities`:
-   ```json
-   [{ "name": "task:{slug}", "entityType": "task", "observations": ["status: {derived-status}"] }]
-   ```
-   Derive the status from the item's Todo subheading: **In Progress** → `in_progress`, **Waiting On** → `blocked`, **Ready** / **Someday** → `pending`. Do not write `priority:` observations — the kanban outline is intentionally unranked.
-
-   If the entity already exists with a different status, use replace-don't-append: `delete_observations` for existing `status:*` strings, then `add_observations` with the derived status.
-
-**3. Ensure project entities exist and link tasks**
-
-For each open task, identify the most relevant project from the journal content. Common mappings:
-
-- Solitaire, Yahoo, Stratum, rapid prototyping, TriPeaks → `project:yahoo`
-- Intusic, Jeremy, Kim, game kit → `project:intusic`
-- ESG, Unity → `project:esg`
-- Claude plugins, journal skill, prioritize skill → `project:claude-plugins`
-
-Call `create_entities` for the project if it may not exist:
-```json
-[{ "name": "project:{slug}", "entityType": "project", "observations": [] }]
-```
-
-Then call `create_relations`:
-```json
-[{ "from": "task:{slug}", "to": "project:{project-slug}", "relationType": "belongs_to" }]
-```
-
-**4. Done** — no need to report graph operations to the user unless an error occurs.
+4. Read `{JOURNAL_PATH}/log.md` — surface logged entries as known activities
+5. Open with a context-appropriate question (fresh day vs. resuming mid-day)
+6. Follow up with relevant questions; continue until the user says **"that's all"** — you MUST NOT proceed to step 7 before this phrase
+7. *(Only after "that's all")* Create and present a consolidated structured summary
+8. Search for relevant tech news related to the user's activities
+9. Add a "Tech Context" section and a kanban-style "Todo" section (In Progress / Ready / Waiting On / Someday) to the summary
+10. Ask for confirmation or revisions
+11. Rewrite `{JOURNAL_PATH}/{today}.md` as a complete, consolidated entry (all sessions merged)
+12. Update `{JOURNAL_PATH}/current_context.md`
+13. Delete or empty `{JOURNAL_PATH}/log.md`
+14. Confirm successful storage
 
 Remember: Your goal is to make journaling easy, consistent, and valuable for the user while maintaining a structured record of their experiences.
