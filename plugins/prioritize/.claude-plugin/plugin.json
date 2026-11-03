@@ -2,6 +2,6 @@
   "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
   "name": "prioritize",
   "description": "Pull-by-energy work picker. Reads the repo work queue plus In Progress and Ready cards from Linear, suggests ones that match your current energy, and plans queue refills (prioritize:queue).",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "skills": "./skills"
 }
