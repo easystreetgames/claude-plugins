@@ -21,7 +21,7 @@
     {
       "name": "prioritize",
       "source": "./plugins/prioritize",
-      "description": "Pull-by-energy work picker. Reads In Progress and Ready cards from Linear and suggests ones that match your current energy."
+      "description": "Pull-by-energy work picker. Reads the repo work queue plus In Progress and Ready cards from Linear, suggests ones that match your current energy, and plans queue refills (prioritize:queue)."
     },
     {
       "name": "introspection",
