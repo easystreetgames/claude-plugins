@@ -47,7 +47,7 @@ On approval:
 1. Add the rows to the Queue table. Step numbers continue the file's count, status is `todo`, and `▶` goes on the first row that isn't `done`.
 2. Remove the queued issues from Not yet ordered.
 3. Update **Current step** and the **Order** paragraph (what this batch is and today's date).
-4. Run the file's **Linear order** sync on `linear-esg` (priorities and blocks). Approving the refill counts as the user asking for it.
+4. Run the file's **Linear order** sync on `linear-esg` (priorities and blocks). Don't ask first.
 5. Set every queued issue that is still in Backlog to **Todo** in Linear. Leave In Progress issues alone.
 6. Commit the file only if the user asks.
 
